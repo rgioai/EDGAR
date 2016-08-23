@@ -27,7 +27,10 @@ class IndexCrawler(object):
         # Read past log file
         if os.path.exists('log_IndexCrawler.txt'):
             log_file = open('log_IndexCrawler.txt', 'r')
-            past_log = log_file.read().split('#####################\n#####################')[1]
+            try:
+                past_log = log_file.read().split('#####################\n#####################')[1]
+            except IndexError:
+                past_log = ''
             log_file.close()
         else:
             past_log = ''
