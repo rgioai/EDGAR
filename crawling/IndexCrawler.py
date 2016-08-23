@@ -25,10 +25,11 @@ class IndexCrawler(object):
         ftp.change_dir('edgar')
 
         # Open log file
-        log_file = open('log_IndexCrawler.txt', 'w')
         if os.path.exists('log_IndexCrawler.txt'):
+            log_file = open('log_IndexCrawler.txt', 'w')
             past_log = log_file.read().split('#####################\n#####################')[1]
         else:
+            log_file = open('log_IndexCrawler.txt', 'w')
             past_log = ''
         this_log = '####### Index Crawler Summary #######\nRun' + str(datetime.datetime.now()) + '\n'
         error_log = '####### Index Crawler Errors #######\nRun' + str(datetime.datetime.now()) + '\n'
