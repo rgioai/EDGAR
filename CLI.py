@@ -21,25 +21,26 @@ elif fn == 'test_ftp':
     pass
 
 elif fn == '-i' or fn == 'index_crawler':
+    # Validate input
     try:
-        start = int(sys.argv[1])
-    except IndexError:
-        start = 1993
+        start = int(arg1)
     except ValueError:
         start = 1993
     try:
-        end = sys.argv[2]
-    except IndexError:
-        end = 2016
+        end = int(arg2)
     except ValueError:
         end = 2016
     try:
-        to_download = sys.argv[3].replace('[', '').replace(']', '').replace("'", '').replace(' ', '').split(',')
-    except IndexError:
-        to_download = ['master.zip, xbrl.zip']
+        to_download = arg3.replace('[', '').replace(']', '').replace("'", '').replace(' ', '').split(',')
     except ValueError:
-        to_download = ['master.zip, xbrl.zip']
-    index_crawler(start, end, to_download)
+        to_download = None
+    try:
+        timeout = float(arg4)
+    except ValueError:
+        timeout = None
+
+    # Run function
+    index_crawler(start, end, to_download, timeout)
 
 elif fn == '-d' or fn == 'document_crawler':
     raise NotImplemented

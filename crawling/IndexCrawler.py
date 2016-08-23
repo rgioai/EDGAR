@@ -5,12 +5,20 @@ import os
 import datetime
 from zipfile import ZipFile
 import sys
+import time
 
 
-def index_crawler(start_year=1993, end_year=2016, files_to_download=None):
+def index_crawler(start_year=1993, end_year=2016, files_to_download=None, timeout=None):
     # Handle mutable defaults
     if files_to_download is None:
         files_to_download = ['master.zip, xbrl.zip']
+    if timeout is not None:
+        # convert timeout from hours to minutes
+        timeout *= 60
+        # convert timeout from minutes to seconds
+        timeout *= 60
+        # start clock
+        start = time.time()
 
     # Init ftp object
     ftp = EdgarFtp()
@@ -67,11 +75,20 @@ def index_crawler(start_year=1993, end_year=2016, files_to_download=None):
 
                         except Exception:
                             # Log errors
-                            error_log += str(datetime.datetime.now()) + ': Failed to download ' + directory + file + '\n'
+                            error_log += str(datetime.datetime.now()) \
+                                         + ': Failed to download ' + directory + file + '\n'
                             fail += 1
+                if timeout is not None:
+                    if time.time() - start > timeout:
+                        exit_code = 'Timeout'
+                        sys.exit()
+        exit_code = 'Loop complete'
         sys.exit()
-    except (KeyboardInterrupt, SystemExit):
-        this_log += 'Successful: %d\nFailed: %d\nUnattempted: %d\n' % (success, fail, total-(success+fail))
+    except (KeyboardInterrupt, SystemExit) as e:
+        if isinstance(e, KeyboardInterrupt):
+            exit_code = 'Keyboard interrupt'
+
+        this_log += 'Exit: %s\nSuccessful: %d\nFailed: %d\nUnattempted: %d\n' % (exit_code, success, fail, total-(success+fail))
         log_file.write(this_log + '\n#####################\n#####################\n')
         log_file.write('\n' + error_log + '\n\n' + past_log)
         log_file.close()
