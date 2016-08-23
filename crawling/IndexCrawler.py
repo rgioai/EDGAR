@@ -7,7 +7,11 @@ from zipfile import ZipFile
 import sys
 
 
-def main(start_year=1993, end_year=2016, files_to_download=['master.zip, xbrl.zip']):
+def index_crawler(start_year=1993, end_year=2016, files_to_download=None):
+    # Handle mutable defaults
+    if files_to_download is None:
+        files_to_download = ['master.zip, xbrl.zip']
+
     # Init ftp object
     ftp = EdgarFtp()
     ftp.change_dir('edgar')
@@ -74,25 +78,21 @@ def main(start_year=1993, end_year=2016, files_to_download=['master.zip, xbrl.zi
 
 if __name__ == '__main__':
     try:
-        start_year = int(sys.argv[1])
+        start = int(sys.argv[1])
     except IndexError:
-        start_year = 1993
+        start = 1993
     except ValueError:
-        start_year = 1993
+        start = 1993
     try:
-        end_year = sys.argv[2]
+        end = sys.argv[2]
     except IndexError:
-        end_year = 2016
+        end = 2016
     except ValueError:
-        end_year = 2016
+        end = 2016
     try:
-        files_to_download = sys.argv[3]
-        files_to_download = files_to_download.replace('[', '').replace(']', '').replace("'", '').replace(' ', '').split(',')
-        files_to_download = files_to_download.replace(']', '')
-        files_to_download = files_to_download.replace("'", '')
-        files_to_download = files_to_download.replace(' ', '')
-        files_to_download = files_to_download.split(',')
+        to_download = sys.argv[3].replace('[', '').replace(']', '').replace("'", '').replace(' ', '').split(',')
     except IndexError:
-        files_to_download = ['master.zip, xbrl.zip']
+        to_download = ['master.zip, xbrl.zip']
     except ValueError:
-        files_to_download = ['master.zip, xbrl.zip']
+        to_download = ['master.zip, xbrl.zip']
+    index_crawler(start, end, to_download)
