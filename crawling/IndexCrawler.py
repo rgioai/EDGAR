@@ -25,8 +25,8 @@ class IndexCrawler(object):
         ftp.change_dir('edgar')
 
         # Read past log file
-        if os.path.exists('~/EDGAR/crawling/log_IndexCrawler.txt'):
-            log_file = open('~/EDGAR/crawling/log_IndexCrawler.txt', 'r')
+        if os.path.exists('EDGAR/crawling/log_IndexCrawler.txt'):
+            log_file = open('EDGAR/crawling/log_IndexCrawler.txt', 'r')
             try:
                 past_log = log_file.read().split('#####################\n#####################')[1]
             except IndexError:
@@ -36,7 +36,7 @@ class IndexCrawler(object):
             past_log = ''
 
         # Open new log file
-        log_file = open('~/EDGAR/crawling/log_IndexCrawler.txt', 'w')
+        log_file = open('EDGAR/crawling/log_IndexCrawler.txt', 'w')
         this_log = '####### Index Crawler Summary #######\nRun' + str(datetime.datetime.now()) + '\n'
         error_log = '####### Index Crawler Errors #######\nRun' + str(datetime.datetime.now()) + '\n'
 
