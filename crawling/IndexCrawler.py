@@ -26,7 +26,10 @@ class IndexCrawler(object):
 
         # Open log file
         log_file = open('log_IndexCrawler.txt', 'w')
-        past_log = log_file.read().split('#####################\n#####################')[1]
+        if os.path.exists('log_IndexCrawler.txt'):
+            past_log = log_file.read().split('#####################\n#####################')[1]
+        else:
+            past_log = ''
         this_log = '####### Index Crawler Summary #######\nRun' + str(datetime.datetime.now()) + '\n'
         error_log = '####### Index Crawler Errors #######\nRun' + str(datetime.datetime.now()) + '\n'
 
