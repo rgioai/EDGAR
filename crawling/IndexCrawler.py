@@ -24,13 +24,16 @@ class IndexCrawler(object):
         ftp = EdgarFtp()
         ftp.change_dir('edgar')
 
-        # Open log file
+        # Read past log file
         if os.path.exists('log_IndexCrawler.txt'):
-            log_file = open('log_IndexCrawler.txt', 'w')
+            log_file = open('log_IndexCrawler.txt', 'r')
             past_log = log_file.read().split('#####################\n#####################')[1]
+            log_file.close()
         else:
-            log_file = open('log_IndexCrawler.txt', 'w')
             past_log = ''
+
+        # Open new log file
+        log_file = open('log_IndexCrawler.txt', 'w')
         this_log = '####### Index Crawler Summary #######\nRun' + str(datetime.datetime.now()) + '\n'
         error_log = '####### Index Crawler Errors #######\nRun' + str(datetime.datetime.now()) + '\n'
 
