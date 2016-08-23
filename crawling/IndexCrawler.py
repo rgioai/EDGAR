@@ -75,6 +75,3 @@ def index_crawler(start_year=1993, end_year=2016, files_to_download=None):
         log_file.write(this_log + '\n#####################\n#####################\n')
         log_file.write('\n' + error_log + '\n\n' + past_log)
         log_file.close()
-
-if __name__ == '__main__':
-
