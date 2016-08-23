@@ -15,7 +15,7 @@ class IndexCrawler(object):
 
         # Handle mutable defaults
         if files_to_download is None:
-            files_to_download = ['master.zip, xbrl.zip']
+            files_to_download = ['master.zip', 'xbrl.zip']
         if timeout is not None:
             timeout = datetime.timedelta(hours=timeout)
         start = datetime.datetime.now()
