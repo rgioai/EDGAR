@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import crawling
-import objects
+from crawling.IndexCrawler import IndexCrawler
 
 # CLI for EDGAR project
 # Current implementations:
@@ -43,7 +42,8 @@ elif fn == '-i' or fn == 'index_crawler':
         timeout = None
 
     # Run function
-    index_crawler(start, end, to_download, timeout)
+    ic = IndexCrawler()
+    ic.crawl(start, end, to_download, timeout)
 
 elif fn == '-d' or fn == 'document_crawler':
     raise NotImplemented
