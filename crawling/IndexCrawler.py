@@ -5,7 +5,6 @@ import os
 import datetime
 from zipfile import ZipFile
 import sys
-import time
 
 
 def index_crawler(start_year=1993, end_year=2016, files_to_download=None, timeout=None):
@@ -13,19 +12,15 @@ def index_crawler(start_year=1993, end_year=2016, files_to_download=None, timeou
     if files_to_download is None:
         files_to_download = ['master.zip, xbrl.zip']
     if timeout is not None:
-        # convert timeout from hours to minutes
-        timeout *= 60
-        # convert timeout from minutes to seconds
-        timeout *= 60
-        # start clock
-        start = time.time()
+        timeout = datetime.timedelta(hours=timeout)
+    start = datetime.datetime.now()
 
     # Init ftp object
     ftp = EdgarFtp()
     ftp.change_dir('edgar')
 
     # Open log file
-    log_file = open('IndexCrawler_Log_' + str(datetime.datetime.now()) + '.txt', 'w')
+    log_file = open('log_IndexCrawler.txt', 'w')
     past_log = log_file.read().split('#####################\n#####################')[1]
     this_log = '####### Index Crawler Summary #######\nRun' + str(datetime.datetime.now()) + '\n'
     error_log = '####### Index Crawler Errors #######\nRun' + str(datetime.datetime.now()) + '\n'
@@ -37,6 +32,8 @@ def index_crawler(start_year=1993, end_year=2016, files_to_download=None, timeou
     total = 0
     success = 0
     fail = 0
+    previously_complete = 0
+    exit_code = None
 
     # Crawler Loop
     try:
@@ -44,6 +41,7 @@ def index_crawler(start_year=1993, end_year=2016, files_to_download=None, timeou
             for qtr in range(1, 4+1):
 
                 # Ignore quarters that haven't finished yet
+                # FUTURE Current quarter functionality
                 if year == 2016:
                     if qtr >= 3:
                         continue
@@ -56,7 +54,9 @@ def index_crawler(start_year=1993, end_year=2016, files_to_download=None, timeou
 
                 for file in files_to_download:
                     file_to_check = directory + file.replace('.zip', '.idx')
-                    if not os.path.exists(file_to_check):
+                    if os.path.exists(file_to_check):
+                        previously_complete += 1
+                    else:
                         try:
                             # Download file
                             print('\rDownloading ' + directory + file)
@@ -79,7 +79,7 @@ def index_crawler(start_year=1993, end_year=2016, files_to_download=None, timeou
                                          + ': Failed to download ' + directory + file + '\n'
                             fail += 1
                 if timeout is not None:
-                    if time.time() - start > timeout:
+                    if datetime.datetime.now() - start > timeout:
                         exit_code = 'Timeout'
                         sys.exit()
         exit_code = 'Loop complete'
@@ -87,8 +87,10 @@ def index_crawler(start_year=1993, end_year=2016, files_to_download=None, timeou
     except (KeyboardInterrupt, SystemExit) as e:
         if isinstance(e, KeyboardInterrupt):
             exit_code = 'Keyboard interrupt'
-
-        this_log += 'Exit: %s\nSuccessful: %d\nFailed: %d\nUnattempted: %d\n' % (exit_code, success, fail, total-(success+fail))
+        if exit_code is None:
+            exit_code = 'Unknown'
+        this_log += 'Exit: %s\nPreviously Complete: %d\nSuccessful: %d\nFailed: %d\nUnattempted: %d\n' \
+                    % (exit_code, previously_complete, success, fail, total-(previously_complete+success+fail))
         log_file.write(this_log + '\n#####################\n#####################\n')
         log_file.write('\n' + error_log + '\n\n' + past_log)
         log_file.close()

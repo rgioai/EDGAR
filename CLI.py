@@ -31,7 +31,10 @@ elif fn == '-i' or fn == 'index_crawler':
     except ValueError:
         end = 2016
     try:
-        to_download = arg3.replace('[', '').replace(']', '').replace("'", '').replace(' ', '').split(',')
+        if arg3 == '-d':
+            to_download = None
+        else:
+            to_download = arg3.replace('[', '').replace(']', '').replace("'", '').replace(' ', '').split(',')
     except ValueError:
         to_download = None
     try:
