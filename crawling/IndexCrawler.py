@@ -25,8 +25,8 @@ class IndexCrawler(object):
         ftp.change_dir('edgar')
 
         # Read past log file
-        if os.path.exists('log_IndexCrawler.txt'):
-            log_file = open('log_IndexCrawler.txt', 'r')
+        if os.path.exists('~/EDGAR/crawling/log_IndexCrawler.txt'):
+            log_file = open('~/EDGAR/crawling/log_IndexCrawler.txt', 'r')
             try:
                 past_log = log_file.read().split('#####################\n#####################')[1]
             except IndexError:
@@ -36,7 +36,7 @@ class IndexCrawler(object):
             past_log = ''
 
         # Open new log file
-        log_file = open('log_IndexCrawler.txt', 'w')
+        log_file = open('~/EDGAR/crawling/log_IndexCrawler.txt', 'w')
         this_log = '####### Index Crawler Summary #######\nRun' + str(datetime.datetime.now()) + '\n'
         error_log = '####### Index Crawler Errors #######\nRun' + str(datetime.datetime.now()) + '\n'
 
@@ -60,7 +60,6 @@ class IndexCrawler(object):
                     if year == 2016:
                         if qtr >= 3:
                             continue
-                    total += 1
 
                     # Make the destination directory
                     directory = 'full-index/' + str(year) + '/QTR' + str(qtr) + '/'
@@ -68,17 +67,18 @@ class IndexCrawler(object):
                         os.makedirs(directory)
 
                     for file in files_to_download:
+                        total += 1
                         file_to_check = directory + file.replace('.zip', '.idx')
                         if os.path.exists(file_to_check):
                             previously_complete += 1
                         else:
                             try:
                                 # Download file
-                                print('\rDownloading ' + directory + file)
+                                print('\rDownloading ' + directory + file, end='')
                                 ftp.download(directory + file)
 
                                 # Unzip file
-                                print('\rUnzipping ' + directory + file)
+                                print('\rUnzipping ' + directory + file, end='')
                                 zipped = ZipFile(directory + file)
                                 zipped.extractall(path=directory)
                                 zipped.close()
