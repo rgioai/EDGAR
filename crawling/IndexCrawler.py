@@ -77,22 +77,4 @@ def index_crawler(start_year=1993, end_year=2016, files_to_download=None):
         log_file.close()
 
 if __name__ == '__main__':
-    try:
-        start = int(sys.argv[1])
-    except IndexError:
-        start = 1993
-    except ValueError:
-        start = 1993
-    try:
-        end = sys.argv[2]
-    except IndexError:
-        end = 2016
-    except ValueError:
-        end = 2016
-    try:
-        to_download = sys.argv[3].replace('[', '').replace(']', '').replace("'", '').replace(' ', '').split(',')
-    except IndexError:
-        to_download = ['master.zip, xbrl.zip']
-    except ValueError:
-        to_download = ['master.zip, xbrl.zip']
-    index_crawler(start, end, to_download)
+
