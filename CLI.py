@@ -8,6 +8,9 @@ import objects
 # -test_ftp
 # -index_crawler
 
+print(str(sys.argv))
+sys.exit()
+
 fn = sys.argv[1]
 arg1 = sys.argv[2]
 arg2 = sys.argv[3]
