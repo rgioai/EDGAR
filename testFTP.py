@@ -4,6 +4,7 @@ from zipfile import ZipFile
 
 ftp = EdgarFtp()
 ftp.change_dir('edgar')
+os.chdir('/storage/')
 
 directory = 'full-index/2015/QTR1/'
 try:
