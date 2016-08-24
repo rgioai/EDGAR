@@ -71,7 +71,6 @@ class DocumentCrawler(object):
                         directory = 'full-index/' + str(year) + '/QTR' + str(qtr) + '/'
                         index_file = open(directory + index, 'r')
 
-
                         for cik in cik_list:
                             for form in forms_to_download:
                                 if not os.path.exists(self.local_form_address(cik, form, year, qtr)):
@@ -82,7 +81,7 @@ class DocumentCrawler(object):
                                                          + ': Failed to locate form ' + edgar_addr + '\n'
                                     else:
                                         try:
-                                            ftp.download(edgar_addr)
+                                            ftp.download(edgar_addr, )
                                             success += 1
                                         except Exception:
                                             # Log errors

@@ -1,7 +1,18 @@
 from ftplib import FTP
 
 
-class EdgarFtp(object):
+class FTPInterface(object):
+    def change_dir(self, target):
+        raise NotImplemented
+
+    def download(self, target, destination):
+        raise NotImplemented
+
+    def upload(self, target, destination):
+        raise NotImplemented
+
+
+class EdgarFtp(FTPInterface):
     def __init__(self):
         domain_name = 'ftp.sec.gov'  # domain name or server ip:
         # username and password anonymous
@@ -12,15 +23,21 @@ class EdgarFtp(object):
     def change_dir(self, target):
         self.ftp.cwd(target)
 
-    def download(self, filename, target=''):
-        if target == '':
-            target = filename
-        local = open(target, 'wb')
-        self.ftp.retrbinary('RETR ' + filename, local.write, 1024)
+    def download(self, target, destination=''):
+        if destination == '':
+            destination = target
+        local = open(destination, 'wb')
+        # TODO Test if this can handle text files too
+        self.ftp.retrbinary('RETR ' + target, local.write, 1024)
         local.close()
 
-    def upload(self, filename):
-        self.ftp.storbinary('STOR ' + filename, open(filename, 'rb'))
+    def upload(self, target, destination=''):
+        if destination == '':
+            destination = target
+        local = open(destination, 'rb')
+        # FUTURE Test if this can handle text files too
+        self.ftp.storbinary('STOR ' + target, local)
+        local.close()
 
 
 # To preserve equitable server access, we ask that bulk
