@@ -1,0 +1,8 @@
+####### EDGAR #######
+#
+####### requirements.txt #######
+#
+###### All Requirements without Version Specifiers ######
+
+numpy
+pandas

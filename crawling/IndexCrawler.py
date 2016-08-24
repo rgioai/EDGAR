@@ -50,16 +50,26 @@ class IndexCrawler(object):
         previously_complete = 0
         exit_code = None
 
+        # Know the current quarter
+        current_year = datetime.date.today().year
+        if 1 <= datetime.date.today().month <= 3:
+            current_qtr = 1
+        elif 4 <= datetime.date.today().month <= 6:
+            current_qtr = 2
+        elif 7 <= datetime.date.today().month <= 9:
+            current_qtr = 3
+        else:
+            current_qtr = 4
+
         # Crawler Loop
         try:
             for year in range(start_year, end_year+1):
                 for qtr in range(1, 4+1):
 
                     # Ignore quarters that haven't finished yet
-                    # FUTURE Current quarter functionality
-                    if year == 2016:
-                        if qtr >= 3:
-                            continue
+                    # FUTURE Add current quarter updating
+                    if year == current_year and qtr >= current_qtr:
+                        continue
 
                     # Make the destination directory
                     directory = 'full-index/' + str(year) + '/QTR' + str(qtr) + '/'
@@ -100,6 +110,7 @@ class IndexCrawler(object):
             exit_code = 'Loop complete'
             sys.exit()
         except (KeyboardInterrupt, SystemExit) as e:
+            print('\n')
             if isinstance(e, KeyboardInterrupt):
                 exit_code = 'Keyboard interrupt'
             if exit_code is None:
