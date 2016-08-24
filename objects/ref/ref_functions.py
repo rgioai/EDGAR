@@ -4,7 +4,7 @@ import os
 
 
 def update_file_structure():
-    f = open('Current_SP500_CIK.txt', 'r')
+    f = open('EDGAR/objects/ref/Current_SP500_CIK.txt', 'r')
     if not os.path.exists('/storage/cik'):
         os.mkdir('/storage/cik')
 
@@ -16,10 +16,10 @@ def update_file_structure():
 
 
 def init_cik_list():
-    f = open('Current_SP500_CIK.txt', 'r')
+    f = open('EDGAR/objects/ref/Current_SP500_CIK.txt', 'r')
     cik_list = []
     for line in f:
-        cik_list.append(line)
+        cik_list.append(line.replace('\n', ''))
     cik_array = np.array(cik_list)
     cik_array.dump('CIK_List.pkl')
     f.close()
@@ -34,3 +34,5 @@ if __name__ == '__main__':
             pass
     except IndexError:
         pass
+    except FileNotFoundError:
+        raise DeprecationWarning('File paths not accurate/in flux')

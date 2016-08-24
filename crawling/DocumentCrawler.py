@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from objects.FTP import EdgarFtp
+from objects.ref.ref_functions import update_file_structure
 import os
 import datetime
 import pickle
@@ -24,7 +25,13 @@ class DocumentCrawler(object):
         ftp = EdgarFtp()
 
         # Init cik_list
-        cik_list = pickle.load('EDGAR/objects/ref/CIK_List.pkl')
+        #cik_list = pickle.load(open('EDGAR/objects/ref/CIK_List.pkl', 'rb'))
+        # TODO Change back to full cik_list
+        cik_list = ['0000320193', '1652044']
+
+
+        # Update directory structure
+        update_file_structure()
 
         # Open new log file
         log_file = open('EDGAR/crawling/log_DocCrawler_%s.txt' % (str(datetime.datetime.now())), 'w')
@@ -66,7 +73,7 @@ class DocumentCrawler(object):
                     if year == current_year and qtr >= current_qtr:
                         continue
 
-                    for index in ['master.idx, xbrl.idx']:
+                    for index in ['master.idx', 'xbrl.idx']:
                         # Open and load the index file
                         directory = 'full-index/' + str(year) + '/QTR' + str(qtr) + '/'
                         index_file = open(directory + index, 'r')
@@ -74,13 +81,15 @@ class DocumentCrawler(object):
                         for cik in cik_list:
                             for form in forms_to_download:
                                 local_addr = self.local_form_address(cik, form, year, qtr)
-                                print('\rCurrent File: %s' % local_addr, end='')
+                                # TODO print('\rCurrent File: %s' % local_addr, end='')
                                 if not os.path.exists(local_addr):
+                                    print('CIK %s; Form %s' % (cik, form))
                                     edgar_addr = self.find_form_address(cik, form, index_file)
                                     if edgar_addr is None:
                                         dont_exist += 1
                                         error_log += str(datetime.datetime.now()) \
-                                                         + ': Failed to locate form ' + edgar_addr + '\n'
+                                                     + ': Failed to locate form %s: %sQTR%s CIK %s\n' \
+                                                       % (form, str(year), str(qtr), cik)
                                     else:
                                         try:
                                             ftp.download(edgar_addr, local_addr)
@@ -88,7 +97,7 @@ class DocumentCrawler(object):
                                         except Exception:
                                             # Log errors
                                             error_log += str(datetime.datetime.now()) \
-                                                         + ': Failed to download ' + edgar_addr + '\n'
+                                                         + ': Failed to download ' + local_addr + '\n'
                                             fail += 1
                                 else:
                                     previously_complete += 1
@@ -109,7 +118,7 @@ class DocumentCrawler(object):
             this_log += 'Exit: %s\nPreviously Complete: %d\nSuccessful: %d\nFailed: %d\n' \
                         'Unattempted: %d\nNot Found: %d\n' % \
                         (exit_code, previously_complete, success,
-                         fail, total-(previously_complete+success+fail), dont_exist)
+                         fail, total - (previously_complete + success + fail), dont_exist)
             log_file.write(this_log + '\n#####################\n#####################\n')
             log_file.write('\n' + error_log)
             log_file.close()
@@ -117,14 +126,15 @@ class DocumentCrawler(object):
     def find_form_address(self, cik, form, index_file):
         header = True
         for line in index_file:
+            line = line.replace('\n', '')
             if header:
                 if '------------' in line:
                     header = False
             else:
                 line_list = line.split('|')
-                if cik == line_list[0] and form == line_list[2]:
+                if int(cik) == int(line_list[0]) and form == line_list[2]:
                     return line_list[4]
         return None
 
     def local_form_address(self, cik, form, year, qtr):
-        return '/storage/cik/%s_%sQ%s_%s.txt' % (str(cik), str(year), str(qtr), str(form))
+        return '/storage/cik/%s/%s_%sQ%s_%s.txt' % (str(cik), str(cik), str(year), str(qtr), str(form))
