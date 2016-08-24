@@ -74,6 +74,7 @@ class DocumentCrawler(object):
                         for cik in cik_list:
                             for form in forms_to_download:
                                 local_addr = self.local_form_address(cik, form, year, qtr)
+                                print('\rCurrent File: %s' % local_addr, end='')
                                 if not os.path.exists(local_addr):
                                     edgar_addr = self.find_form_address(cik, form, index_file)
                                     if edgar_addr is None:

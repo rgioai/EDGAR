@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 import sys
+import os
 from crawling.IndexCrawler import IndexCrawler
 from crawling.DocumentCrawler import DocumentCrawler
 
 # CLI for EDGAR project
 # Current implementations:
+# -CLI test
 # -automated
 # -index_crawler
 # -document_crawler
@@ -15,7 +17,13 @@ arg2 = sys.argv[3]
 arg3 = sys.argv[4]
 arg4 = sys.argv[5]
 
-if fn == '-a' or fn == 'auto':
+if fn == '-t' or fn == 'test':
+    print("fn: %s arg1: %s arg2: %s arg3: %s arg4: %s" % (str(fn), str(arg1), str(arg2), str(arg3), str(arg4)))
+    print("project dir: %s" % os.getcwd())
+    os.chdir('/storage/')
+    print("storage dir: %s" % os.getcwd())
+
+elif fn == '-a' or fn == 'auto':
     settings = {}
     with open('crawling/crawling_settings.txt', 'r') as f:
         for line in f:
@@ -32,7 +40,7 @@ if fn == '-a' or fn == 'auto':
     dc = DocumentCrawler()
     dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], settings['doc_timeout'])
 
-elif fn == '-i' or fn == 'index_crawler':
+elif fn == '-idx' or fn == 'index_crawler':
     # Validate input
     try:
         start = int(arg1)
@@ -58,7 +66,7 @@ elif fn == '-i' or fn == 'index_crawler':
     ic = IndexCrawler()
     ic.crawl(start, end, to_download, timeout)
 
-elif fn == '-d' or fn == 'document_crawler':
+elif fn == '-doc' or fn == 'document_crawler':
     # Validate input
     try:
         start = int(arg1)
