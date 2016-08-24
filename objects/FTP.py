@@ -12,8 +12,10 @@ class EdgarFtp(object):
     def change_dir(self, target):
         self.ftp.cwd(target)
 
-    def download(self, filename):
-        local = open(filename, 'wb')
+    def download(self, filename, target=''):
+        if target == '':
+            target = filename
+        local = open(target, 'wb')
         self.ftp.retrbinary('RETR ' + filename, local.write, 1024)
         local.close()
 
