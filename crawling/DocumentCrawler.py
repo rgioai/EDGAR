@@ -73,7 +73,8 @@ class DocumentCrawler(object):
 
                         for cik in cik_list:
                             for form in forms_to_download:
-                                if not os.path.exists(self.local_form_address(cik, form, year, qtr)):
+                                local_addr = self.local_form_address(cik, form, year, qtr)
+                                if not os.path.exists(local_addr):
                                     edgar_addr = self.find_form_address(cik, form, index_file)
                                     if edgar_addr is None:
                                         dont_exist += 1
@@ -81,7 +82,7 @@ class DocumentCrawler(object):
                                                          + ': Failed to locate form ' + edgar_addr + '\n'
                                     else:
                                         try:
-                                            ftp.download(edgar_addr, )
+                                            ftp.download(edgar_addr, local_addr)
                                             success += 1
                                         except Exception:
                                             # Log errors
@@ -112,7 +113,6 @@ class DocumentCrawler(object):
             log_file.write('\n' + error_log)
             log_file.close()
 
-
     def find_form_address(self, cik, form, index_file):
         header = True
         for line in index_file:
@@ -124,7 +124,6 @@ class DocumentCrawler(object):
                 if cik == line_list[0] and form == line_list[2]:
                     return line_list[4]
         return None
-
 
     def local_form_address(self, cik, form, year, qtr):
         return '/storage/cik/%s_%sQ%s_%s.txt' % (str(cik), str(year), str(qtr), str(form))
