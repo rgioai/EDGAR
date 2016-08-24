@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-import numpy as np
 import os
+import pickle
+import sys
 
 
 def update_file_structure():
@@ -9,7 +10,7 @@ def update_file_structure():
         os.mkdir('/storage/cik')
 
     for line in f:
-        directory = '/storage/cik/' + line
+        directory = '/storage/cik/' + line.replace('\n', '')
         if not os.path.exists(directory):
             os.mkdir(directory)
     f.close()
@@ -20,19 +21,16 @@ def init_cik_list():
     cik_list = []
     for line in f:
         cik_list.append(line.replace('\n', ''))
-    cik_array = np.array(cik_list)
-    cik_array.dump('CIK_List.pkl')
+    pickle.dump(cik_list, open('EDGAR/objects/ref/CIK_List.pkl', 'wb'))
     f.close()
 
 if __name__ == '__main__':
     try:
-        if sys.argv[1] == 'update_file_structure' or sys.argv[1] == '-u':
-            update_file_structure()
-        elif sys.argv[1] == 'init_cik_list' or sys.argv[1] == '-i':
-            init_cik_list()
-        else:
-            pass
+        os.chdir()
+        init_cik_list()
+        update_file_structure()
     except IndexError:
         pass
     except FileNotFoundError:
+
         raise DeprecationWarning('File paths not accurate/in flux')

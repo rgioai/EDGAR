@@ -3,6 +3,7 @@ import sys
 import os
 from crawling.IndexCrawler import IndexCrawler
 from crawling.DocumentCrawler import DocumentCrawler
+from objects.ref.ref_functions import *
 
 # CLI for EDGAR project
 # Current implementations:
@@ -91,5 +92,7 @@ elif fn == '-doc' or fn == 'document_crawler':
     dc = DocumentCrawler()
     dc.crawl(start, end, to_download, timeout)
 
-elif fn == '-c' or fn == 'update_cik':
-    raise NotImplemented
+elif fn == '-ref' or fn == 'update_ref':
+    print("Updating reference")
+    init_cik_list()
+    update_file_structure()
