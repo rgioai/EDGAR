@@ -52,7 +52,7 @@ class EdgarFtp(FTPInterface):
         if destination == '':
             destination = target
         local = open(destination, 'wb')
-        # TODO Test if this can handle text files too
+        # FUTURE Test if this can handle text files too
         self.ftp.retrbinary('RETR ' + target, local.write, 1024)
         local.close()
 
