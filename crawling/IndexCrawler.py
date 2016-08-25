@@ -19,7 +19,7 @@ class IndexCrawler(object):
         :param start_year: The earliest year for which to collect data; default 2000
         :param end_year: The latest year for which to collect data; default 2016
         :param files_to_download: File names to download; default ['master.zip', 'xbrl.zip']
-        :param timeout: Decimal hours of how long the index crawler should run before timeout
+        :param timeout: Decimal hours of how long to run before timeout; default None
         :return: None
         """
 

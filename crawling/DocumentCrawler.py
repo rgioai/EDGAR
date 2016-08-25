@@ -20,7 +20,7 @@ class DocumentCrawler(object):
         :param start_year: The earliest year for which to collect data; default 2000
         :param end_year: The latest year for which to collect data; default 2016
         :param forms_to_download: Forms types to download; default ['10-K', '10-Q', '10-K/A', '10-Q/A']
-        :param timeout: Decimal hours of how long the document crawler should run before timeout
+        :param timeout: Decimal hours of how long to run before timeout; default None
         :return: None
         """
 
@@ -72,7 +72,7 @@ class DocumentCrawler(object):
             year = end_year
             while year >= start_year:
                 for qtr in [4, 3, 2, 1]:
-                    print('%sQTR%s' % (str(year), str(qtr)))
+                    print('\n%sQTR%s' % (str(year), str(qtr)))
 
                     # Ignore quarters that haven't finished yet
                     if year == current_year and qtr >= current_qtr:
@@ -93,6 +93,7 @@ class DocumentCrawler(object):
                                 if '------------' in line:
                                     header = False
                             else:
+                                # Check if this line is a document we should download
                                 line_list = line.split('|')
                                 cik = str(int(line_list[0]))
                                 form = line_list[2]
@@ -134,18 +135,13 @@ class DocumentCrawler(object):
             log_file.write('\n' + error_log)
             log_file.close()
 
-    def find_form_address(self, cik, form, index_file):
-        header = True
-        for line in index_file:
-            line = line.replace('\n', '')
-            if header:
-                if '------------' in line:
-                    header = False
-            else:
-                line_list = line.split('|')
-                if int(cik) == int(line_list[0]) and form == line_list[2]:
-                    return line_list[4]
-        return None
-
     def local_form_address(self, cik, form, year, qtr):
+        """
+        All parameters must be valid literal for str().
+        :param cik:
+        :param form:
+        :param year:
+        :param qtr:
+        :return: Local path to specified file.
+        """
         return '/storage/cik/%s/%s_%sQ%s_%s.txt' % (str(cik), str(cik), str(year), str(qtr), str(form))
