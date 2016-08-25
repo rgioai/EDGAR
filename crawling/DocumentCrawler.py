@@ -9,10 +9,20 @@ import sys
 
 
 class DocumentCrawler(object):
+    """
+    Crawls EDGAR database for documents through crawl() method.
+    """
     def __init__(self):
         pass
 
     def crawl(self, start_year=2000, end_year=2016, forms_to_download=None, timeout=None):
+        """
+        :param start_year: The earliest year for which to collect data; default 2000
+        :param end_year: The latest year for which to collect data; default 2016
+        :param forms_to_download: Forms types to download; default ['10-K', '10-Q', '10-K/A', '10-Q/A']
+        :param timeout: Decimal hours of how long the document crawler should run before timeout
+        :return: None
+        """
 
         # Handle mutable defaults
         if forms_to_download is None:

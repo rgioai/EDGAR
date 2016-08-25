@@ -5,12 +5,42 @@ from crawling.IndexCrawler import IndexCrawler
 from crawling.DocumentCrawler import DocumentCrawler
 from objects.ref.ref_functions import *
 
-# CLI for EDGAR project
-# Current implementations:
-# -CLI test
-# -automated
-# -index_crawler
-# -document_crawler
+"""
+CLI for EDGAR project.  When edgar bash function is in ~/.bash_profile, call using:
+edgar fn arg1 arg2 arg3 arg4
+
+Current implementations:
+-CLI test: Prints arguments to verify correct edgar bash function, verifies and prints storage directory
+    fn: -t or test
+    arg1: n/a
+    arg2: n/a
+    arg3: n/a
+    arg4: n/a
+-Automated crawl: Runs index and document crawlers based on EDGAR/crawling/crawling_settings.txt
+    fn: -a or auto
+    arg1: n/a
+    arg2: n/a
+    arg3: n/a
+    arg4: n/a
+-Index crawl: Crawls EDGAR for index files
+    fn: -idx or index_crawler
+    arg1: starting year
+    arg2: ending year
+    arg3: List of files to download ['form1', form2']; -d to default ['master.zip', 'xbrl.zip']
+    arg4: Decimal hours of how long the index crawler should run before timeout
+-Document crawl: Crawls EDGAR for documents
+    fn: -doc or document_crawler
+    arg1: starting year
+    arg2: ending year
+    arg3: List of files to download ['form1', form2']; -d to default ['10-K', '10-Q', '10-K/A', '10-Q/A']
+    arg4: Decimal hours of how long the document crawler should run before timeout
+-Update reference: Updates CIK_List.pkl and file structure based on objects/ref/ref_functions.py
+    fn: -ref or update_ref'
+    arg1: n/a
+    arg2: n/a
+    arg3: n/a
+    arg4: n/a
+"""
 
 fn = sys.argv[1]
 arg1 = sys.argv[2]
@@ -30,6 +60,8 @@ elif fn == '-a' or fn == 'auto':
         for line in f:
             if "EDGAR" in line:
                 continue
+            elif "####" in line:
+                break
             else:
                 line = line.replace(' ', '').split(':')
                 settings[line[0]] = line[1]

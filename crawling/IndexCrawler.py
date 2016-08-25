@@ -8,10 +8,20 @@ import sys
 
 
 class IndexCrawler(object):
+    """
+    Crawls EDGAR database for index files through crawl() method.
+    """
     def __init__(self):
         pass
 
     def crawl(self, start_year=1993, end_year=2016, files_to_download=None, timeout=None):
+        """
+        :param start_year: The earliest year for which to collect data; default 2000
+        :param end_year: The latest year for which to collect data; default 2016
+        :param files_to_download: File names to download; default ['master.zip', 'xbrl.zip']
+        :param timeout: Decimal hours of how long the index crawler should run before timeout
+        :return: None
+        """
 
         # Handle mutable defaults
         if files_to_download is None:

@@ -3,4 +3,14 @@ start_year: 1993
 end_year: 2016
 index_timeout: 0.5
 doc_timeout: 8
-forms: 10-K, 10-Q
+forms: 10-K, 10-Q, 10-K/A, 10-Q/A
+
+#####################################################################
+Settings for automated crawling, if enabled via cron/launchd.
+
+Example:            | Description:
+start_year: 2000    | The earliest year for which to collect data
+end_year: 2016      | The latest year for which to collect data
+index_timeout: 0.5  | Decimal hours of how long the index crawler should run before timeout
+doc_timeout: 8      | Decimal hours of how long the document crawler should run before timeout
+forms: 10-K, 10-Q   | Forms to download
