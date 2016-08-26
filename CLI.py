@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
+
+"""Command line interface for EDGAR project.
+When edgar bash function is in ~/.bash_profile, call using:
+edgar fn arg1 arg2 arg3 arg4"""
+
 import sys
 import os
+import subprocess
 from crawling.IndexCrawler import IndexCrawler
 from crawling.DocumentCrawler import DocumentCrawler
 from objects.ref.ref_functions import *
 
 """
-CLI for EDGAR project.  When edgar bash function is in ~/.bash_profile, call using:
-edgar fn arg1 arg2 arg3 arg4
-
 Current implementations:
 -CLI test: Prints arguments to verify correct edgar bash function, verifies and prints storage directory
     fn: -t or test
@@ -34,11 +37,12 @@ Current implementations:
     arg2: ending year
     arg3: List of files to download ['form1', form2']; -d to default ['10-K', '10-Q', '10-K/A', '10-Q/A']
     arg4: Decimal hours of how long the document crawler should run before timeout
--Update reference: Updates CIK_List.pkl and file structure based on objects/ref/ref_functions.py
+-Update reference: Updates package files (see args)
     fn: -ref or update_ref'
-    arg1: n/a
-    arg2: n/a
-    arg3: n/a
+    1: update; 0: do nothing
+    arg1: CIK_List.pkl based on objects/ref/ref_functions.py
+    arg2: File structure based on objects/ref/ref_functions.py
+    arg3: docs via pydoc
     arg4: n/a
 """
 
@@ -125,6 +129,16 @@ elif fn == '-doc' or fn == 'document_crawler':
     dc.crawl(start, end, to_download, timeout)
 
 elif fn == '-ref' or fn == 'update_ref':
-    print("Updating reference")
-    init_cik_list()
-    update_file_structure()
+    if arg1 == '1':
+        print("Updating CIK_List.pkl")
+        init_cik_list()
+    elif arg2 == '1':
+        update_file_structure()
+        print("Updating file structure")
+    elif arg3 == '1':
+        # TODO Fix functionality
+        os.chdir('EDGAR/docs')
+        subprocess.run(['pydoc -w EDGAR/*/*/*'])
+        print("Generating docs")
+    elif arg4 == '1':
+        pass
