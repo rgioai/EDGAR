@@ -106,7 +106,10 @@ class DocumentCrawler(object):
                                         print('\rFound %s for %s' % (form, cik), end='')
                                         total += 1
                                         edgar_addr = line_list[4]
-                                        local_addr = self.local_form_address(cik, form, year, qtr)
+                                        if index is 'master.idx':
+                                            local_addr = self.local_form_address(cik, form, year, qtr)
+                                        else:
+                                            local_addr = self.local_form_address(cik, form, year, qtr, xbrl=True)
                                         if not os.path.exists(local_addr):
                                             try:
                                                 ftp.download(edgar_addr, local_addr)
