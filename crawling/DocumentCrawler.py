@@ -12,6 +12,7 @@ class DocumentCrawler(object):
     """
     Crawls EDGAR database for documents through crawl() method.
     """
+
     def __init__(self):
         pass
 
@@ -86,37 +87,44 @@ class DocumentCrawler(object):
                         index_file = open(directory + index, 'r')
 
                         header = True
-                        for line in index_file:
-                            line = line.replace('\n', '')
-                            if header:
-                                # Filter out the header
-                                if '------------' in line:
-                                    header = False
-                            else:
-                                # Check if this line is a document we should download
-                                line_list = line.split('|')
-                                cik = str(int(line_list[0]))
-                                form = line_list[2]
-                                if cik in cik_list and form in forms_to_download:
-                                    print('\rFound %s for %s' % (form, cik), end='')
-                                    total += 1
-                                    edgar_addr = line_list[4]
-                                    local_addr = self.local_form_address(cik, form, year, qtr)
-                                    if not os.path.exists(local_addr):
-                                        try:
-                                            ftp.download(edgar_addr, local_addr)
-                                            success += 1
-                                        except Exception:
-                                            # Log errors
-                                            error_log += str(datetime.datetime.now()) \
-                                                         + ': Failed to download ' + edgar_addr + '\n'
-                                            fail += 1
-                                    else:
-                                        previously_complete += 1
-                            if timeout is not None:
-                                if datetime.datetime.now() - start > timeout:
-                                    exit_code = 'Timeout'
-                                    sys.exit()
+                        # TODO Figure out what's wrong
+                        """UnicodeDecodeError:
+                        ‘utf-8’ codec can’t decode byte 0xc3 in position 2313: invalid continuation byte"""
+                        try:
+                            for line in index_file:
+                                line = line.replace('\n', '')
+                                if header:
+                                    # Filter out the header
+                                    if '------------' in line:
+                                        header = False
+                                else:
+                                    # Check if this line is a document we should download
+                                    line_list = line.split('|')
+                                    cik = str(int(line_list[0]))
+                                    form = line_list[2]
+                                    if cik in cik_list and form in forms_to_download:
+                                        print('\rFound %s for %s' % (form, cik), end='')
+                                        total += 1
+                                        edgar_addr = line_list[4]
+                                        local_addr = self.local_form_address(cik, form, year, qtr)
+                                        if not os.path.exists(local_addr):
+                                            try:
+                                                ftp.download(edgar_addr, local_addr)
+                                                success += 1
+                                            except Exception:
+                                                # Log errors
+                                                error_log += str(datetime.datetime.now()) \
+                                                             + ': Failed to download ' + edgar_addr + '\n'
+                                                fail += 1
+                                        else:
+                                            previously_complete += 1
+                                if timeout is not None:
+                                    if datetime.datetime.now() - start > timeout:
+                                        exit_code = 'Timeout'
+                                        sys.exit()
+                        except UnicodeDecodeError as e:
+                            error_log += str(datetime.datetime.now()) + ': Failed to decode ' + str(e) + '\n'
+                            continue
                 year -= 1
             exit_code = 'Loop complete'
             sys.exit()
@@ -135,13 +143,18 @@ class DocumentCrawler(object):
             log_file.write('\n' + error_log)
             log_file.close()
 
-    def local_form_address(self, cik, form, year, qtr):
+    def local_form_address(self, cik, form, year, qtr, xbrl=False):
         """
-        All parameters must be valid literal for str().
+        All parameters must be valid literal for str(),
+        except xbrl which is a bool default False.
         :param cik:
         :param form:
         :param year:
         :param qtr:
+        :param xbrl: is an xbrl file
         :return: Local path to specified file.
         """
-        return '/storage/cik/%s/%s_%sQ%s_%s.txt' % (str(cik), str(cik), str(year), str(qtr), str(form))
+        if xbrl:
+            return '/storage/cik/%s/%s_%sQ%s_%s_xbrl.txt' % (str(cik), str(cik), str(year), str(qtr), str(form))
+        else:
+            return '/storage/cik/%s/%s_%sQ%s_%s.txt' % (str(cik), str(cik), str(year), str(qtr), str(form))
