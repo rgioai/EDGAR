@@ -22,10 +22,16 @@ class IndexCrawler(object):
         :param timeout: Decimal hours of how long to run before timeout; default None
         :return: None
         """
+        # Force parameter types
+        start_year = int(start_year)
+        end_year = int(end_year)
+        timeout = float(timeout)
 
         # Handle mutable defaults
         if files_to_download is None:
             files_to_download = ['master.zip', 'xbrl.zip']
+        assert(isinstance(files_to_download, list))
+        assert(isinstance(files_to_download[0], str))
         if timeout is not None:
             timeout = datetime.timedelta(hours=timeout)
         start = datetime.datetime.now()

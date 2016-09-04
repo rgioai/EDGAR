@@ -68,7 +68,9 @@ elif fn == '-a' or fn == 'auto':
             elif "####" in line:
                 break
             else:
-                line = line.replace(' ', '').split(':')
+                line = line.replace(' ', '')
+                line = line.replace('\n', '')
+                line = line.split(':')
                 settings[line[0]] = line[1]
     settings['forms'] = settings['forms'].split(',')
 

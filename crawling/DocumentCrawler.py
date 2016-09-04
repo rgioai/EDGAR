@@ -24,10 +24,16 @@ class DocumentCrawler(object):
         :param timeout: Decimal hours of how long to run before timeout; default None
         :return: None
         """
+        # Force parameter types
+        start_year = int(start_year)
+        end_year = int(end_year)
+        timeout = float(timeout)
 
         # Handle mutable defaults
         if forms_to_download is None:
             forms_to_download = ['10-K', '10-Q', '10-K/A', '10-Q/A']
+        assert(isinstance(forms_to_download, list))
+        assert(isinstance(forms_to_download[0], str))
         if timeout is not None:
             timeout = datetime.timedelta(hours=timeout)
         start = datetime.datetime.now()
