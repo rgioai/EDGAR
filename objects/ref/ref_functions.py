@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 import os
 import pickle
+from objects.AVLTree import AVLTree
 import sys
 import subprocess
 
 
-def update_file_structure():
+def update_file_structure(limit=999):
     """
     Opens the hardcoded file containing CIKs to collect data on,
     and ensures they have the associated directory.
@@ -21,6 +22,22 @@ def update_file_structure():
         directory = '/storage/cik/' + line.replace('\n', '')
         if not os.path.exists(directory):
             os.mkdir(directory)
+    f.close()
+
+
+def init_cik_tree():
+    """
+    Creates the CIK_Tree.pkl serialized object for DocumentCrawler
+    from a hardcoded file.
+    :return: None
+    """
+    # FUTURE Adapt to variable inputs/a standardized file.
+    cik_tree = AVLTree()
+    f = open('objects/ref/Current_SP500_CIK.txt', 'r')
+    for line in f:
+        line = line.replace('\n', '')
+        cik_tree.insert(int(line))
+    pickle.dump(cik_tree, open('objects/ref/CIK_Tree.pkl', 'wb'))
     f.close()
 
 
@@ -40,7 +57,8 @@ def init_cik_list():
 
 if __name__ == '__main__':
     try:
-        os.chdir()
+        #os.chdir()
+        init_cik_tree()
         init_cik_list()
         update_file_structure()
     except IndexError:
