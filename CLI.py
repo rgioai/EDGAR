@@ -7,6 +7,7 @@ edgar fn arg1 arg2 arg3 arg4"""
 import sys
 import os
 import subprocess
+import datetime
 from crawling.IndexCrawler import IndexCrawler
 from crawling.DocumentCrawler import DocumentCrawler
 from objects.ref.ref_functions import *
@@ -71,9 +72,11 @@ elif fn == '-a' or fn == 'auto':
                 settings[line[0]] = line[1]
     settings['forms'] = settings['forms'].split(',')
 
+    print('Automated Run beginning %s\n\nIndex Crawler: ' % datetime.datetime.now())
     ic = IndexCrawler()
     ic.crawl(settings['start_year'], settings['end_year'], None, settings['index_timeout'])
 
+    print('Document Crawler: ')
     dc = DocumentCrawler()
     dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], settings['doc_timeout'])
 

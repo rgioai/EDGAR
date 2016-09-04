@@ -98,7 +98,7 @@ class IndexCrawler(object):
                                 ftp.download(directory + file)
 
                                 # Unzip file
-                                print('\rUnzipping ' + directory + file, end='')
+                                # print('\rUnzipping ' + directory + file, end='')
                                 zipped = ZipFile(directory + file)
                                 zipped.extractall(path=directory)
                                 zipped.close()
