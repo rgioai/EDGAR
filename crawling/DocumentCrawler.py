@@ -86,54 +86,49 @@ class DocumentCrawler(object):
                         # FUTURE Add current quarter updating
                         continue
 
-                    # Search both index files
-                    for index in ['master.idx', 'xbrl.idx']:
-                        # Open and load the index file
-                        directory = 'full-index/' + str(year) + '/QTR' + str(qtr) + '/'
-                        index_file = open(directory + index, 'r')
+                    # Open and load the index file
+                    directory = 'full-index/' + str(year) + '/QTR' + str(qtr) + '/'
+                    index_file = open(directory + 'master.idx', 'r')
 
-                        header = True
-                        # TODO Figure out what's wrong
-                        """UnicodeDecodeError:
-                        ‘utf-8’ codec can’t decode byte 0xc3 in position 2313: invalid continuation byte"""
-                        try:
-                            for line in index_file:
-                                line = line.replace('\n', '')
-                                if header:
-                                    # Filter out the header
-                                    if '------------' in line:
-                                        header = False
-                                else:
-                                    # Check if this line is a document we should download
-                                    line_list = line.split('|')
-                                    cik = str(int(line_list[0]))
-                                    form = line_list[2]
-                                    if cik in cik_list and form in forms_to_download:
-                                        print('\rFound %s for %s' % (form, cik), end='')
-                                        total += 1
-                                        edgar_addr = line_list[4]
-                                        if index is 'master.idx':
-                                            local_addr = self.local_form_address(cik, form, year, qtr)
-                                        else:
-                                            local_addr = self.local_form_address(cik, form, year, qtr, xbrl=True)
-                                        if not os.path.exists(local_addr):
-                                            try:
-                                                ftp.download(edgar_addr, local_addr)
-                                                success += 1
-                                            except Exception:
-                                                # Log errors
-                                                error_log += str(datetime.datetime.now()) \
-                                                             + ': Failed to download ' + edgar_addr + '\n'
-                                                fail += 1
-                                        else:
-                                            previously_complete += 1
-                                if timeout is not None:
-                                    if datetime.datetime.now() - start > timeout:
-                                        exit_code = 'Timeout'
-                                        sys.exit()
-                        except UnicodeDecodeError as e:
-                            error_log += str(datetime.datetime.now()) + ': Failed to decode ' + str(e) + '\n'
-                            continue
+                    header = True
+                    # TODO Figure out what's wrong
+                    """UnicodeDecodeError:
+                    ‘utf-8’ codec can’t decode byte 0xc3 in position 2313: invalid continuation byte"""
+                    try:
+                        for line in index_file:
+                            line = line.replace('\n', '')
+                            if header:
+                                # Filter out the header
+                                if '------------' in line:
+                                    header = False
+                            else:
+                                # Check if this line is a document we should download
+                                line_list = line.split('|')
+                                cik = str(int(line_list[0]))
+                                form = line_list[2]
+                                if cik in cik_list and form in forms_to_download:
+                                    print('\rFound %s for %s' % (form, cik), end='')
+                                    total += 1
+                                    edgar_addr = line_list[4]
+                                    local_addr = self.local_form_address(cik, form, year, qtr)
+                                    if not os.path.exists(local_addr):
+                                        try:
+                                            ftp.download(edgar_addr, local_addr)
+                                            success += 1
+                                        except Exception:
+                                            # Log errors
+                                            error_log += str(datetime.datetime.now()) \
+                                                         + ': Failed to download ' + edgar_addr + '\n'
+                                            fail += 1
+                                    else:
+                                        previously_complete += 1
+                            if timeout is not None:
+                                if datetime.datetime.now() - start > timeout:
+                                    exit_code = 'Timeout'
+                                    sys.exit()
+                    except UnicodeDecodeError as e:
+                        error_log += str(datetime.datetime.now()) + ': Failed to decode ' + str(e) + '\n'
+                        continue
                 year -= 1
             exit_code = 'Loop complete'
             sys.exit()
