@@ -14,6 +14,9 @@ from requests import get
 
 
 def get_cik(ticker):
+    URL = 'http://www.sec.gov/cgi-bin/browse-edgar?CIK={}&Find=Search&owner=exclude&action=getcompany'
+    CIK_RE = re.compile(r'.*CIK=(\d{10}).*')
+    
     results = CIK_RE.findall(get(URL.format(ticker)).content)
     if len(results):
         return str(results[0])

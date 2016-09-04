@@ -12,7 +12,7 @@ def update_file_structure():
     :return: None
     """
     # FUTURE Adapt to CIK_List.pkl
-    f = open('objects/ref/Current_SP500_CIK.txt', 'r')
+    f = open('objects/ref/CIK_List.txt', 'r')
     if not os.path.exists('/storage/cik'):
         os.mkdir('/storage/cik')
 
@@ -31,7 +31,7 @@ def init_cik_list():
     :return: None
     """
     # FUTURE Adapt to variable inputs/a standardized file.
-    f = open('objects/ref/Current_SP500_CIK.txt', 'r')
+    f = open('objects/ref/CIK_List.txt', 'r')
     cik_list = []
     for line in f:
         cik_list.append(line.replace('\n', ''))
