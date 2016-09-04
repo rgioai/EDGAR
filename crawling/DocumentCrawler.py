@@ -48,7 +48,7 @@ class DocumentCrawler(object):
         update_file_structure()
 
         # Open new log file
-        log_file = open('crawling/log_DocCrawler_%s.txt' % (str(datetime.datetime.now())), 'w')
+        log_file = open('crawling/logs/log_DocCrawler_%s.txt' % (str(datetime.datetime.now())), 'w')
         this_log = '####### Doc Crawler Summary #######\nRun' + str(datetime.datetime.now()) + '\n'
         error_log = '####### Doc Crawler Errors #######\nRun' + str(datetime.datetime.now()) + '\n'
 
