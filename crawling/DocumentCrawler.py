@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from objects.FTP import EdgarFtp
+from objects.BST import BST
 from objects.ref.ref_functions import update_file_structure
 import os
 import datetime
@@ -42,7 +43,8 @@ class DocumentCrawler(object):
         ftp = EdgarFtp()
 
         # Init cik_list
-        cik_list = pickle.load(open('objects/ref/CIK_List.pkl', 'rb'))
+        #cik_list = pickle.load(open('objects/ref/CIK_List.pkl', 'rb'))
+        cik_tree = pickle.load(open('objects/ref/CIK_Tree.pkl', 'rb'))
 
         # Update directory structure
         update_file_structure()
@@ -104,9 +106,9 @@ class DocumentCrawler(object):
                             else:
                                 # Check if this line is a document we should download
                                 line_list = line.split('|')
-                                cik = str(int(line_list[0]))
+                                cik = int(line_list[0])
                                 form = line_list[2]
-                                if cik in cik_list and form in forms_to_download:
+                                if cik_tree.find(cik) is not None and form in forms_to_download:
                                     print('\rFound %s for %s' % (form, cik), end='')
                                     total += 1
                                     edgar_addr = line_list[4]
