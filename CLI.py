@@ -46,6 +46,8 @@ Current implementations:
     arg3: docs via pydoc
     arg4: n/a
 """
+pkg_path = os.path.expanduser('~') + '/EDGAR'
+os.chdir(pkg_path)
 
 fn = sys.argv[1]
 arg1 = sys.argv[2]
@@ -61,7 +63,7 @@ if fn == '-t' or fn == 'test':
 
 elif fn == '-a' or fn == 'auto':
     settings = {}
-    with open('EDGAR/crawling/crawling_settings.txt', 'r') as f:
+    with open('crawling/crawling_settings.txt', 'r') as f:
         for line in f:
             if "EDGAR" in line:
                 continue
@@ -78,6 +80,7 @@ elif fn == '-a' or fn == 'auto':
     ic = IndexCrawler()
     ic.crawl(settings['start_year'], settings['end_year'], None, settings['index_timeout'])
 
+    os.chdir(pkg_path)
     print('Document Crawler: ')
     dc = DocumentCrawler()
     dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], settings['doc_timeout'])

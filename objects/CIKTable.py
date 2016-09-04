@@ -53,7 +53,7 @@ class CikTable(object):
         Dumps DataFrame to EDGAR/objects/ref/CIK_Table.pkl
         :return: None
         """
-        with open('EDGAR/objects/ref/CIK_Table.pkl', 'wb') as f:
+        with open('objects/ref/CIK_Table.pkl', 'wb') as f:
             pickle.dump(self.data, f, pickle.HIGHEST_PROTOCOL)
             f.close()
 
@@ -62,7 +62,7 @@ class CikTable(object):
         Loads DataFrame from EDGAR/objects/ref/CIK_Table.pkl
         :return:
         """
-        with open('EDGAR/objects/ref/CIK_Table.pkl', 'rb') as f:
+        with open('objects/ref/CIK_Table.pkl', 'rb') as f:
             self.data = pickle.load(f)
             assert(isinstance(self.data, pd.DataFrame))
             f.close()

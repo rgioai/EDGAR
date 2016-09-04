@@ -42,14 +42,13 @@ class DocumentCrawler(object):
         ftp = EdgarFtp()
 
         # Init cik_list
-        print(os.getcwd())
-        cik_list = pickle.load(open('EDGAR/objects/ref/CIK_List.pkl', 'rb'))
+        cik_list = pickle.load(open('objects/ref/CIK_List.pkl', 'rb'))
 
         # Update directory structure
         update_file_structure()
 
         # Open new log file
-        log_file = open('EDGAR/crawling/log_DocCrawler_%s.txt' % (str(datetime.datetime.now())), 'w')
+        log_file = open('crawling/log_DocCrawler_%s.txt' % (str(datetime.datetime.now())), 'w')
         this_log = '####### Doc Crawler Summary #######\nRun' + str(datetime.datetime.now()) + '\n'
         error_log = '####### Doc Crawler Errors #######\nRun' + str(datetime.datetime.now()) + '\n'
 
