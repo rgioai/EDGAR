@@ -42,6 +42,7 @@ class DocumentCrawler(object):
         ftp = EdgarFtp()
 
         # Init cik_list
+        print(os.getcwd())
         cik_list = pickle.load(open('EDGAR/objects/ref/CIK_List.pkl', 'rb'))
 
         # Update directory structure
