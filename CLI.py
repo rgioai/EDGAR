@@ -50,10 +50,22 @@ pkg_path = os.path.expanduser('~') + '/EDGAR'
 os.chdir(pkg_path)
 
 fn = sys.argv[1]
-arg1 = sys.argv[2]
-arg2 = sys.argv[3]
-arg3 = sys.argv[4]
-arg4 = sys.argv[5]
+try:
+    arg1 = sys.argv[2]
+except IndexError:
+    arg1 = 0
+try:
+    arg2 = sys.argv[3]
+except IndexError:
+    arg2 = 0
+try:
+    arg3 = sys.argv[4]
+except IndexError:
+    arg3 = 0
+try:
+    arg4 = sys.argv[5]
+except IndexError:
+    arg4 = 0
 
 if fn == '-t' or fn == 'test':
     print("fn: %s arg1: %s arg2: %s arg3: %s arg4: %s" % (str(fn), str(arg1), str(arg2), str(arg3), str(arg4)))
