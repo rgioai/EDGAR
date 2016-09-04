@@ -11,37 +11,46 @@ class CikTable(object):
     """
     def __init__(self):
         """
-        Tries to load a serialized CikTable; creates an empty one if it cannot load.
+        Tries to load a serialized CikTable; else, creates from csv.
         :return: None
         """
         self.data = None
         try:
-            self.load()
+            self.load_pkl()
             assert(isinstance(self.data, pd.DataFrame))
         except FileNotFoundError:
-            # TODO Init properly
-            self.data = pd.DataFrame(columns=['CIK', 'Symbol', 'Name', 'Industry', 'Directory_Path'])
-        raise NotImplementedError
+            self.load_csv()
+            assert(isinstance(self.data, pd.DataFrame))
 
-    def add_row(self, cik, symbol, name):
-        # FUTURE require only symbol, lookup cik and name.
-        # TODO Add the row to self.data
-        raise NotImplementedError
+    def find(self, symbol, cik=None):
+        if symbol is None:
+            raise NotImplementedError
 
-    def remove_row(self, cik=None, symbol=None, name=None):
-        # TODO Remove row
-        raise NotImplementedError
 
-    def add_column(self, col_name):
-        # Future add column name
-        raise NotImplementedError
-    
-    def remove_column(self, col_name):
-        # Future remove column name
+    def add_row(self, symbol, cik='NaN', name='NaN', sector='NaN', industry='NaN', date_added='NaN', date_removed='NaN', reason='NaN'):
+        if cik == 'NaN':
+            # Future Dynamic cik lookup
+            pass
+        df = pd.DataFrame([symbol, cik, name, sector, industry, date_added, date_removed, reason], columns=
+        ['Ticker symbol', 'CIK,Security', 'GICS Sector', 'GICS Sub Industry', 'Date added','Date Removed,Reason'])
+        self.data.append(df, ignore_index=True)
+
+    def remove_row(self, key):
+        try:
+            key = int(key)
+        except ValueError:
+            key = self.get_cik(key)
+        # TODO select row containing key as cik
+        # TODO remove that row
         raise NotImplementedError
 
     def change_value(self, new_value, col, cik=None, symbol=None, name=None):
         # TODO Change value
+        raise NotImplementedError
+
+    def get_cik(self, symbol):
+        # TODO Find the row containing that symbol
+        # TODO Retun its cik
         raise NotImplementedError
 
     def update(self):
@@ -57,7 +66,7 @@ class CikTable(object):
             pickle.dump(self.data, f, pickle.HIGHEST_PROTOCOL)
             f.close()
 
-    def load(self):
+    def load_pkl(self):
         """
         Loads DataFrame from EDGAR/objects/ref/CIK_Table.pkl
         :return:
@@ -67,4 +76,9 @@ class CikTable(object):
             assert(isinstance(self.data, pd.DataFrame))
             f.close()
 
-
+    def load_csv(self):
+        """
+        Loads DataFrame from EDGAR/objects/ref/CIK_Table.csv
+        :return:
+        """
+        raise NotImplementedError
