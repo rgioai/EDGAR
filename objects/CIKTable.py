@@ -21,28 +21,32 @@ class CikTable(object):
         except FileNotFoundError:
             # TODO Init properly
             self.data = pd.DataFrame(columns=['CIK', 'Symbol', 'Name', 'Industry', 'Directory_Path'])
-        raise NotImplemented
+        raise NotImplementedError
 
     def add_row(self, cik, symbol, name):
         # FUTURE require only symbol, lookup cik and name.
         # TODO Add the row to self.data
-        raise NotImplemented
+        raise NotImplementedError
 
     def remove_row(self, cik=None, symbol=None, name=None):
         # TODO Remove row
-        raise NotImplemented
+        raise NotImplementedError
 
     def add_column(self, col_name):
-        # TODO add column name
-        raise NotImplemented
+        # Future add column name
+        raise NotImplementedError
+    
+    def remove_column(self, col_name):
+        # Future remove column name
+        raise NotImplementedError
 
     def change_value(self, new_value, col, cik=None, symbol=None, name=None):
         # TODO Change value
-        raise NotImplemented
+        raise NotImplementedError
 
     def update(self):
         # TODO load CIK_List.pkl and add_row for every CIK if not in table already
-        raise NotImplemented
+        raise NotImplementedError
 
     def save(self):
         """

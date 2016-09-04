@@ -125,6 +125,7 @@ elif fn == '-doc' or fn == 'document_crawler':
     except ValueError:
         timeout = None
 
+    # Run function
     dc = DocumentCrawler()
     dc.crawl(start, end, to_download, timeout)
 

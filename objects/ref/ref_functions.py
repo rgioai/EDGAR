@@ -2,6 +2,7 @@
 import os
 import pickle
 import sys
+import subprocess
 
 
 def update_file_structure():
