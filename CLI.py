@@ -61,7 +61,7 @@ if fn == '-t' or fn == 'test':
 
 elif fn == '-a' or fn == 'auto':
     settings = {}
-    with open('crawling/crawling_settings.txt', 'r') as f:
+    with open('EDGAR/crawling/crawling_settings.txt', 'r') as f:
         for line in f:
             if "EDGAR" in line:
                 continue
