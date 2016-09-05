@@ -33,7 +33,7 @@ def init_cik_tree():
     """
     # FUTURE Adapt to variable inputs/a standardized file.
     cik_tree = AVLTree()
-    f = open('objects/ref/Current_SP500_CIK.txt', 'r')
+    f = open('objects/ref/CIK_List.txt', 'r')
     for line in f:
         line = line.replace('\n', '')
         cik_tree.insert(int(line))
