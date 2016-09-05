@@ -76,8 +76,7 @@ class DocumentCrawler(object):
                     print('\n%sQTR%s' % (str(year), str(qtr)))
 
                     # Ignore quarters that haven't finished yet
-                    if year == current_year and qtr >= current_qtr:
-                        # FUTURE Add current quarter updating
+                    if year >= current_year and qtr > current_qtr:
                         continue
 
                     # Open and load the index file

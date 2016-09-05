@@ -78,24 +78,25 @@ class IndexCrawler(object):
 
                     # Ignore quarters that haven't finished yet
                     # FUTURE Add current quarter updating
-                    if year == current_year and qtr >= current_qtr:
+                    if year >= current_year and qtr > current_qtr:
+                        # Coming Quarter
                         continue
 
-                    # Make the destination directory
-                    directory = 'full-index/' + str(year) + '/QTR' + str(qtr) + '/'
-                    if not os.path.exists(directory):
-                        os.makedirs(directory)
+                    elif year == current_year and qtr == current_qtr:
+                        # Current Quarter
+                        # Make the destination directory
+                        directory = 'full-index/' + str(year) + '/QTR' + str(qtr) + '/'
+                        if not os.path.exists(directory):
+                            os.makedirs(directory)
 
-                    for file in files_to_download:
-                        total += 1
-                        file_to_check = directory + file.replace('.zip', '.idx')
-                        if os.path.exists(file_to_check):
-                            previously_complete += 1
-                        else:
+                        for file in files_to_download:
+                            total += 1
+                            file_to_check = directory + file.replace('.zip', '.idx')
+                            os.remove(file_to_check)
                             try:
                                 # Download file
                                 print('\rDownloading ' + directory + file, end='')
-                                ftp.download(directory + file)
+                                ftp.download('full-index/' + file, directory + file)
 
                                 # Unzip file
                                 # print('\rUnzipping ' + directory + file, end='')
@@ -113,6 +114,41 @@ class IndexCrawler(object):
                                 error_log += str(datetime.datetime.now()) \
                                              + ': Failed to download ' + directory + file + '\n'
                                 fail += 1
+
+                    else:
+                        # Past Quarter
+                        # Make the destination directory
+                        directory = 'full-index/' + str(year) + '/QTR' + str(qtr) + '/'
+                        if not os.path.exists(directory):
+                            os.makedirs(directory)
+
+                        for file in files_to_download:
+                            total += 1
+                            file_to_check = directory + file.replace('.zip', '.idx')
+                            if os.path.exists(file_to_check):
+                                previously_complete += 1
+                            else:
+                                try:
+                                    # Download file
+                                    print('\rDownloading ' + directory + file, end='')
+                                    ftp.download(directory + file)
+
+                                    # Unzip file
+                                    # print('\rUnzipping ' + directory + file, end='')
+                                    zipped = ZipFile(directory + file)
+                                    zipped.extractall(path=directory)
+                                    zipped.close()
+
+                                    # Remove zip file
+                                    os.remove(directory + file)
+
+                                    success += 1
+
+                                except Exception:
+                                    # Log errors
+                                    error_log += str(datetime.datetime.now()) \
+                                                 + ': Failed to download ' + directory + file + '\n'
+                                    fail += 1
                     if timeout is not None:
                         if datetime.datetime.now() - start > timeout:
                             exit_code = 'Timeout'
