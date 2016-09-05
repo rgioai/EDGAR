@@ -92,7 +92,8 @@ class IndexCrawler(object):
                         for file in files_to_download:
                             total += 1
                             file_to_check = directory + file.replace('.zip', '.idx')
-                            os.remove(file_to_check)
+                            if os.path.exists(file_to_check):
+                                os.remove(file_to_check)
                             try:
                                 # Download file
                                 print('\rDownloading ' + directory + file, end='')
