@@ -3,6 +3,7 @@
 from objects.FTP import EdgarFtp
 import os
 import datetime
+from math import ceil
 from zipfile import ZipFile
 import sys
 
@@ -68,14 +69,7 @@ class IndexCrawler(object):
 
         # Know the current quarter
         current_year = datetime.date.today().year
-        if 1 <= datetime.date.today().month <= 3:
-            current_qtr = 1
-        elif 4 <= datetime.date.today().month <= 6:
-            current_qtr = 2
-        elif 7 <= datetime.date.today().month <= 9:
-            current_qtr = 3
-        else:
-            current_qtr = 4
+        current_qtr = ceil(datetime.date.today().month/3)
 
         # Crawler Loop
         try:

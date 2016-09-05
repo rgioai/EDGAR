@@ -153,13 +153,13 @@ elif fn == '-ref' or fn == 'update_ref':
     if arg1 == '1':
         print("Updating CIK_List.pkl")
         init_cik_list()
-    elif arg2 == '1':
+    if arg2 == '1':
         update_file_structure()
         print("Updating file structure")
-    elif arg3 == '1':
+    if arg3 == '1':
         # TODO Fix functionality
         os.chdir('EDGAR/docs')
         subprocess.run(['pydoc -w EDGAR/*/*/*'])
         print("Generating docs")
-    elif arg4 == '1':
+    if arg4 == '1':
         pass
