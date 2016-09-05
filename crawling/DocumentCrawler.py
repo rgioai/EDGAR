@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from objects.FTP import EdgarFtp
-from objects.BST import BST
+from objects.AVLTree import AVLTree
 from objects.ref.ref_functions import update_file_structure
 import os
 from math import ceil
