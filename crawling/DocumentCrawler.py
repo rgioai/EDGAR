@@ -134,9 +134,9 @@ class DocumentCrawler(object):
                 exit_code = 'Keyboard interrupt'
             if exit_code is None:
                 exit_code = 'Unknown'
-            this_log += 'Exit: %s\nPreviously Complete: %d\nSuccessful: %d\nFailed: %d\n' \
+            this_log += 'Exit: %s at %s\nPreviously Complete: %d\nSuccessful: %d\nFailed: %d\n' \
                         'Unattempted: %d\n' % \
-                        (exit_code, previously_complete, success,
+                        (str(datetime.datetime.now()), exit_code, previously_complete, success,
                          fail, total - (previously_complete + success + fail))
             log_file.write(this_log + '\n#####################\n#####################\n')
             log_file.write('\n' + error_log)
