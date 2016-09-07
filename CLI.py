@@ -151,11 +151,10 @@ elif fn == '-doc' or fn == 'document_crawler':
 
 elif fn == '-ref' or fn == 'update_ref':
     if arg1 == '1':
-        raise NotImplementedError
-        # print("Updating CIK_List.pkl")
-        # init_cik_list()
-        # print("Updating CIK_Tree.pkl")
-        # init_cik_tree()
+        print("Updating CIK_List.pkl")
+        init_cik_list()
+        print("Updating CIK_Tree.pkl")
+        init_cik_tree()
     if arg2 == '1':
         raise NotImplementedError
         # fix_file_structure()
