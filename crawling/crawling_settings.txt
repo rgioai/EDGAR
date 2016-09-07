@@ -3,7 +3,7 @@ start_year: 2000
 end_year: 2016
 index_timeout: 0.25
 doc_timeout: 8.75
-forms: 10-K, 10-Q, 10-K/A, 10-Q/A, 8-K
+forms: 10-K, 10-Q, 10-K/A, 10-Q/A, 8-K, 4
 #####################################################################
 Settings for automated crawling, if enabled via cron/launchd.
 
