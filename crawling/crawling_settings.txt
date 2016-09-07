@@ -1,5 +1,5 @@
 EDGAR Automated Crawling Settings:
-start_year: 2000
+start_year: 1993
 end_year: 2016
 index_timeout: 0.25
 doc_timeout: 8.75
