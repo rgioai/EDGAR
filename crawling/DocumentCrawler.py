@@ -44,7 +44,7 @@ class DocumentCrawler(object):
         ftp = EdgarFtp()
 
         # Init cik_list
-        #cik_list = pickle.load(open('objects/ref/CIK_List.pkl', 'rb'))
+        # cik_list = pickle.load(open('objects/ref/CIK_List.pkl', 'rb'))
         cik_tree = pickle.load(open('objects/ref/CIK_Tree.pkl', 'rb'))
 
         # Update directory structure

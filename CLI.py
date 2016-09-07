@@ -151,18 +151,22 @@ elif fn == '-doc' or fn == 'document_crawler':
 
 elif fn == '-ref' or fn == 'update_ref':
     if arg1 == '1':
-        print("Updating CIK_List.pkl")
-        init_cik_list()
-        print("Updating CIK_Tree.pkl")
-        init_cik_tree()
+        raise NotImplementedError
+        # print("Updating CIK_List.pkl")
+        # init_cik_list()
+        # print("Updating CIK_Tree.pkl")
+        # init_cik_tree()
     if arg2 == '1':
-        fix_file_structure()
-        print("Fixing file structure")
+        raise NotImplementedError
+        # fix_file_structure()
+        # print("Fixing file structure")
     if arg3 == '1':
         raise NotImplementedError
-        # TODO Fix functionality
         # os.chdir('EDGAR/docs')
         # subprocess.run(['pydoc -w EDGAR/*/*/*'])
         # print("Generating docs")
     if arg4 == '1':
-        pass
+        raise NotImplementedError
+
+else:
+    print('Unrecognized command')
