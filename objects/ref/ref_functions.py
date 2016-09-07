@@ -2,8 +2,31 @@
 import os
 import pickle
 from objects.AVLTree import AVLTree
+import shutil
 import sys
 import subprocess
+
+
+def fix_file_structure():
+    for dr in os.listdir('/storage/old_cik'):
+        cik = dr
+        while len(cik) < 9:
+            cik = '0' + cik
+
+        top_dir = cik[-9:-6]
+        if not os.path.exists('/storage/cik/%s' % top_dir):
+            os.mkdir('/storage/cik/%s' % top_dir)
+        mid_dir = cik[-6:-3]
+        if not os.path.exists('/storage/cik/%s/%s' % (top_dir, mid_dir)):
+            os.mkdir('/storage/cik/%s/%s' % (top_dir, mid_dir))
+        low_dir = dr[-3:]
+        if not os.path.exists('/storage/cik/%s/%s/%s' % (top_dir, mid_dir, low_dir)):
+            os.mkdir('/storage/cik/%s/%s/%s' % (top_dir, mid_dir, low_dir))
+
+        for file in os.listdir('/storage/old_cik/%s' % dr):
+            src = '/storage/old_cik/%s/%s' % (dr, file)
+            dst = '/storage/cik/%s/%s/%s/%s' % (top_dir, mid_dir, low_dir, file)
+            shutil.move(src, dst)
 
 
 def update_file_structure(limit=999):

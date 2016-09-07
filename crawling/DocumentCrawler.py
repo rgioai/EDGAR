@@ -153,7 +153,25 @@ class DocumentCrawler(object):
         :param xbrl: is an xbrl file
         :return: Local path to specified file.
         """
+
+        # Parce cik
+        cik = str(cik)
+        while len(cik) < 9:
+            cik = '0' + cik
+
+        top_dir = cik[-9:-6]
+        if not os.path.exists('/storage/cik/%s' % top_dir):
+            os.mkdir('/storage/cik/%s' % top_dir)
+        mid_dir = cik[-6:-3]
+        if not os.path.exists('/storage/cik/%s/%s' % (top_dir, mid_dir)):
+            os.mkdir('/storage/cik/%s/%s' % (top_dir, mid_dir))
+        low_dir = cik[-3:]
+        if not os.path.exists('/storage/cik/%s/%s/%s' % (top_dir, mid_dir, low_dir)):
+            os.mkdir('/storage/cik/%s/%s/%s' % (top_dir, mid_dir, low_dir))
+
         if xbrl:
-            return '/storage/cik/%s/%s_%sQ%s_%s_xbrl.txt' % (str(cik), str(cik), str(year), str(qtr), str(form))
+            return '/storage/cik/%s/%s/%s/%s_%sQ%s_%s_xbrl.txt' \
+                   % (top_dir, mid_dir, low_dir, str(cik), str(year), str(qtr), str(form))
         else:
-            return '/storage/cik/%s/%s_%sQ%s_%s.txt' % (str(cik), str(cik), str(year), str(qtr), str(form))
+            return '/storage/cik/%s/%s/%s/%s_%sQ%s_%s.txt' \
+                   % (top_dir, mid_dir, low_dir, str(cik), str(year), str(qtr), str(form))

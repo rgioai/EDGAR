@@ -156,8 +156,8 @@ elif fn == '-ref' or fn == 'update_ref':
         print("Updating CIK_Tree.pkl")
         init_cik_tree()
     if arg2 == '1':
-        update_file_structure()
-        print("Updating file structure")
+        fix_file_structure()
+        print("Fixing file structure")
     if arg3 == '1':
         raise NotImplementedError
         # TODO Fix functionality
