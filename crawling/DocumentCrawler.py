@@ -170,8 +170,22 @@ class DocumentCrawler(object):
             os.mkdir('/storage/cik/%s/%s/%s' % (top_dir, mid_dir, low_dir))
 
         if xbrl:
-            return '/storage/cik/%s/%s/%s/%s_%sQ%s_%s_xbrl.txt' \
+            path = '/storage/cik/%s/%s/%s/%s_%sQ%s_%s_xbrl.txt' \
                    % (top_dir, mid_dir, low_dir, str(cik), str(year), str(qtr), str(form))
         else:
-            return '/storage/cik/%s/%s/%s/%s_%sQ%s_%s.txt' \
+            path = '/storage/cik/%s/%s/%s/%s_%sQ%s_%s.txt' \
                    % (top_dir, mid_dir, low_dir, str(cik), str(year), str(qtr), str(form))
+
+        if not os.path.exists(path):
+            return path
+        else:
+            i = 0
+            while os.path.exists(path):
+                i += 1
+                if xbrl:
+                    path = '/storage/cik/%s/%s/%s/%s_%sQ%s_%s_xbrl(%d).txt' \
+                           % (top_dir, mid_dir, low_dir, str(cik), str(year), str(qtr), str(form), i)
+                else:
+                    path = '/storage/cik/%s/%s/%s/%s_%sQ%s_%s(%d).txt' \
+                           % (top_dir, mid_dir, low_dir, str(cik), str(year), str(qtr), str(form), i)
+            return path
