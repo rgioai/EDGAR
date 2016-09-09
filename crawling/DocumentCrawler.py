@@ -102,7 +102,7 @@ class DocumentCrawler(object):
                                 cik = int(line_list[0])
                                 form = line_list[2]
                                 if cik_tree.find(cik) is not None and form in forms_to_download:
-                                    print('\rFound %s for %s' % (form, cik), end='')
+                                    # print('\rFound %s for %s' % (form, cik), end='')
                                     total += 1
                                     edgar_addr = line_list[4]
                                     local_addr = self.local_form_address(cik, form, year, qtr)
