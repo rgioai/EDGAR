@@ -177,8 +177,10 @@ class DocumentCrawler(object):
 
         if xbrl:
             path = '/storage/cik/%s/%s/%s/%s_%sQ%s_%s_xbrl(%s).txt' \
-                   % (top_dir, mid_dir, low_dir, str(cik), str(year), str(qtr), str(form), str(edgar_addr))
+                   % (top_dir, mid_dir, low_dir, str(cik), str(year),
+                      str(qtr), str(form).replace('/', '-'), str(edgar_addr))
         else:
             path = '/storage/cik/%s/%s/%s/%s_%sQ%s_%s(%s).txt' \
-                   % (top_dir, mid_dir, low_dir, str(cik), str(year), str(qtr), str(form), str(edgar_addr))
+                   % (top_dir, mid_dir, low_dir, str(cik), str(year),
+                      str(qtr), str(form).replace('/', '-'), str(edgar_addr))
         return path
