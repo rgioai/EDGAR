@@ -161,6 +161,10 @@ class DocumentCrawler(object):
         while len(cik) < 9:
             cik = '0' + cik
 
+        # Parce Unique ID
+        edgar_addr = edgar_addr[:-4].split('/')
+        edgar_addr = edgar_addr[len(edgar_addr)-1]
+
         top_dir = cik[-9:-6]
         if not os.path.exists('/storage/cik/%s' % top_dir):
             os.mkdir('/storage/cik/%s' % top_dir)
@@ -173,8 +177,8 @@ class DocumentCrawler(object):
 
         if xbrl:
             path = '/storage/cik/%s/%s/%s/%s_%sQ%s_%s_xbrl(%s).txt' \
-                   % (top_dir, mid_dir, low_dir, str(cik), str(year), str(qtr), str(form), str(edgar_addr[:-4]))
+                   % (top_dir, mid_dir, low_dir, str(cik), str(year), str(qtr), str(form), str(edgar_addr))
         else:
             path = '/storage/cik/%s/%s/%s/%s_%sQ%s_%s(%s).txt' \
-                   % (top_dir, mid_dir, low_dir, str(cik), str(year), str(qtr), str(form), str(edgar_addr[:-4]))
+                   % (top_dir, mid_dir, low_dir, str(cik), str(year), str(qtr), str(form), str(edgar_addr))
         return path
