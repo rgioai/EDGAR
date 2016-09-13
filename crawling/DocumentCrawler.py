@@ -102,16 +102,16 @@ class DocumentCrawler(object):
 
                                     total += 1
                                     edgar_addr = line_list[4]
-                                    local_addr = self.local_form_address(cik, form, year, qtr)
+                                    local_addr = self.local_form_address(cik, form, year, qtr, edgar_addr)
                                     if not os.path.exists(local_addr):
                                         try:
                                             ftp.download(edgar_addr, local_addr)
                                             success += 1
                                             status = 'success'
-                                        except Exception:
+                                        except Exception as e:
                                             # Log errors
-                                            error_log += str(datetime.datetime.now()) \
-                                                         + ': Failed to download ' + edgar_addr + '\n'
+                                            error_log += str(datetime.datetime.now()) + ': Failed to download ' \
+                                                         + edgar_addr + '     ' + str(e) + '\n'
                                             fail += 1
                                             status = 'fail'
                                     else:
@@ -143,7 +143,7 @@ class DocumentCrawler(object):
             log_file.write('\n' + error_log)
             log_file.close()
 
-    def local_form_address(self, cik, form, year, qtr, xbrl=False):
+    def local_form_address(self, cik, form, year, qtr, edgar_addr, xbrl=False):
         """
         All parameters must be valid literal for str(),
         except xbrl which is a bool default False.
@@ -151,6 +151,7 @@ class DocumentCrawler(object):
         :param form:
         :param year:
         :param qtr:
+        :param edgar_addr:
         :param xbrl: is an xbrl file
         :return: Local path to specified file.
         """
@@ -177,16 +178,8 @@ class DocumentCrawler(object):
             path = '/storage/cik/%s/%s/%s/%s_%sQ%s_%s.txt' \
                    % (top_dir, mid_dir, low_dir, str(cik), str(year), str(qtr), str(form))
 
-        if not os.path.exists(path):
-            return path
-        else:
-            i = 0
-            while os.path.exists(path):
-                i += 1
-                if xbrl:
-                    path = '/storage/cik/%s/%s/%s/%s_%sQ%s_%s_xbrl(%d).txt' \
-                           % (top_dir, mid_dir, low_dir, str(cik), str(year), str(qtr), str(form), i)
-                else:
-                    path = '/storage/cik/%s/%s/%s/%s_%sQ%s_%s(%d).txt' \
-                           % (top_dir, mid_dir, low_dir, str(cik), str(year), str(qtr), str(form), i)
-            return path
+        if os.path.exists(path):
+            l = str(edgar_addr[:-4]).split('/')
+            l = l[len(l)-1]
+            path = path[:-4] + '(' + l + ').txt'
+        return path
