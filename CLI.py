@@ -88,6 +88,11 @@ elif fn == '-a' or fn == 'auto':
                 settings[line[0]] = line[1]
     settings['forms'] = settings['forms'].split(',')
 
+    if arg1 == 0:
+        timeout = settings['doc_timeout']
+    else:
+        timeout = arg1
+
     print('Automated Run beginning %s\n\nIndex Crawler: ' % datetime.datetime.now())
     ic = IndexCrawler()
     ic.crawl(settings['start_year'], settings['end_year'], None, settings['index_timeout'])
@@ -95,7 +100,7 @@ elif fn == '-a' or fn == 'auto':
     os.chdir(pkg_path)
     print('Document Crawler: ')
     dc = DocumentCrawler()
-    dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], settings['doc_timeout'])
+    dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], timeout)
 
 elif fn == '-idx' or fn == 'index_crawler':
     # Validate input
