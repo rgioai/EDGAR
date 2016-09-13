@@ -47,9 +47,6 @@ class DocumentCrawler(object):
         # cik_list = pickle.load(open('objects/ref/CIK_List.pkl', 'rb'))
         cik_tree = pickle.load(open('objects/ref/CIK_Tree.pkl', 'rb'))
 
-        # Update directory structure
-        update_file_structure()
-
         # Open new log file
         log_file = open('crawling/logs/log_DocCrawler_%s.txt' % (str(datetime.datetime.now())), 'w')
         this_log = '####### Doc Crawler Summary #######\nRun' + str(datetime.datetime.now()) + '\n'
@@ -102,7 +99,7 @@ class DocumentCrawler(object):
                                 cik = int(line_list[0])
                                 form = line_list[2]
                                 if cik_tree.find(cik) is not None and form in forms_to_download:
-                                    # print('\rFound %s for %s' % (form, cik), end='')
+
                                     total += 1
                                     edgar_addr = line_list[4]
                                     local_addr = self.local_form_address(cik, form, year, qtr)
@@ -110,13 +107,17 @@ class DocumentCrawler(object):
                                         try:
                                             ftp.download(edgar_addr, local_addr)
                                             success += 1
+                                            status = 'success'
                                         except Exception:
                                             # Log errors
                                             error_log += str(datetime.datetime.now()) \
                                                          + ': Failed to download ' + edgar_addr + '\n'
                                             fail += 1
+                                            status = 'fail'
                                     else:
                                         previously_complete += 1
+                                        status = 'previously complete'
+                                    print('%s for %s: %s' % (form, cik, status))
                             if timeout is not None:
                                 if datetime.datetime.now() - start > timeout:
                                     exit_code = 'Timeout'
