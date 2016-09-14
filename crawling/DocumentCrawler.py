@@ -2,7 +2,6 @@
 
 from objects.FTP import EdgarFtp
 from objects.AVLTree import AVLTree
-from objects.ref.ref_functions import update_file_structure
 import os
 from math import ceil
 import datetime
@@ -47,20 +46,32 @@ class DocumentCrawler(object):
         # cik_list = pickle.load(open('objects/ref/CIK_List.pkl', 'rb'))
         cik_tree = pickle.load(open('objects/ref/CIK_Tree.pkl', 'rb'))
 
+        # Read past log file
+        if os.path.exists('crawling/logs/log_DocCrawler.txt'):
+            log_file = open('crawling/logs/log_DocCrawler.txt', 'r')
+            try:
+                past_log = log_file.read().split('#####################\n#####################')[1]
+            except IndexError:
+                past_log = ''
+            log_file.close()
+        else:
+            past_log = ''
+
         # Open new log file
-        log_file = open('crawling/logs/log_DocCrawler_%s.txt' % (str(datetime.datetime.now())), 'w')
-        this_log = '####### Doc Crawler Summary #######\nRun' + str(datetime.datetime.now()) + '\n'
-        error_log = '####### Doc Crawler Errors #######\nRun' + str(datetime.datetime.now()) + '\n'
+        log_file = open('crawling/logs/log_DocCrawler.txt', 'w')
+        this_log = '####### Doc Crawler Summary #######\nRun ' + str(datetime.datetime.now()) + '\n'
+        qtr_log = ''
+        error_log = '####### Doc Crawler Errors #######\nRun ' + str(datetime.datetime.now()) + '\n'
 
         # Change to the large storage directory
         os.chdir('/storage/')
 
         # Init counters
-        total = 0
-        success = 0
-        fail = 0
-        previously_complete = 0
-        exit_code = None
+        t_total = 0
+        t_success = 0
+        t_fail = 0
+        t_previously_complete = 0
+        t_exit_code = None
 
         # Know the current quarter
         current_year = datetime.date.today().year
@@ -72,11 +83,14 @@ class DocumentCrawler(object):
             year = end_year
             while year >= start_year:
                 for qtr in [4, 3, 2, 1]:
-                    print('\n%sQTR%s' % (str(year), str(qtr)))
-
                     # Ignore quarters that haven't finished yet
                     if year >= current_year and qtr > current_qtr:
                         continue
+                    # Init counters
+                    q_total = 0
+                    q_success = 0
+                    q_fail = 0
+                    q_previously_complete = 0
 
                     # Open and load the index file
                     directory = 'full-index/' + str(year) + '/QTR' + str(qtr) + '/'
@@ -100,47 +114,55 @@ class DocumentCrawler(object):
                                 form = line_list[2]
                                 if cik_tree.find(cik) is not None and form in forms_to_download:
 
-                                    total += 1
+                                    t_total += 1
+                                    q_total += 1
                                     edgar_addr = line_list[4]
                                     local_addr = self.local_form_address(cik, form, year, qtr, edgar_addr)
                                     if not os.path.exists(local_addr):
                                         try:
                                             ftp.download(edgar_addr, local_addr)
-                                            success += 1
+                                            t_success += 1
+                                            q_success += 1
                                             status = 'success'
                                         except Exception as e:
                                             # Log errors
                                             error_log += str(datetime.datetime.now()) + ': Failed to download ' \
                                                          + edgar_addr + '     ' + str(e) + '\n'
-                                            fail += 1
+                                            t_fail += 1
+                                            q_fail += 1
                                             status = 'fail'
                                     else:
-                                        previously_complete += 1
+                                        t_previously_complete += 1
+                                        q_previously_complete += 1
                                         status = 'previously complete'
-                                    print('%s for %s: %s' % (form, cik, status))
+                                    # print('%s for %s: %s' % (form, cik, status))
                             if timeout is not None:
                                 if datetime.datetime.now() - start > timeout:
-                                    exit_code = 'Timeout'
+                                    t_exit_code = 'Timeout'
                                     sys.exit()
                     except UnicodeDecodeError as e:
                         error_log += str(datetime.datetime.now()) + ': Failed to decode ' + str(e) + '\n'
                         continue
+                    qtr_log = '\n%sQTR%s, %d, %d, %d, %d' % \
+                              (str(year), str(qtr), q_previously_complete, q_success,
+                               q_fail, q_total - (q_previously_complete + q_success + q_fail)) + qtr_log
                 year -= 1
-            exit_code = 'Loop complete'
+            t_exit_code = 'Loop complete'
             sys.exit()
 
         except (KeyboardInterrupt, SystemExit) as e:
-            print('\n')
             if isinstance(e, KeyboardInterrupt):
-                exit_code = 'Keyboard interrupt'
-            if exit_code is None:
-                exit_code = 'Unknown'
+                t_exit_code = 'Keyboard interrupt'
+            if t_exit_code is None:
+                t_exit_code = 'Unknown'
+            print(t_exit_code)
+            qtr_log = '####### By Quarter Summary #######\nQTR, Previous, Success, Fail, Unattempted' + qtr_log
             this_log += 'Exit: %s at %s\nPreviously Complete: %d\nSuccessful: %d\nFailed: %d\n' \
                         'Unattempted: %d\n' % \
-                        (exit_code, str(datetime.datetime.now()), previously_complete, success,
-                         fail, total - (previously_complete + success + fail))
-            log_file.write(this_log + '\n#####################\n#####################\n')
-            log_file.write('\n' + error_log)
+                        (t_exit_code, str(datetime.datetime.now()), t_previously_complete, t_success,
+                         t_fail, t_total - (t_previously_complete + t_success + t_fail))
+            log_file.write(this_log + '\n' + qtr_log + '\n#####################\n#####################\n')
+            log_file.write('\n' + error_log + '\n\n' + past_log)
             log_file.close()
 
     def local_form_address(self, cik, form, year, qtr, edgar_addr, xbrl=False):

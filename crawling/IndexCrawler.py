@@ -54,8 +54,8 @@ class IndexCrawler(object):
 
         # Open new log file
         log_file = open('crawling/logs/log_IndexCrawler.txt', 'w')
-        this_log = '####### Index Crawler Summary #######\nRun' + str(datetime.datetime.now()) + '\n'
-        error_log = '####### Index Crawler Errors #######\nRun' + str(datetime.datetime.now()) + '\n'
+        this_log = '####### Index Crawler Summary #######\nRun ' + str(datetime.datetime.now()) + '\n'
+        error_log = '####### Index Crawler Errors #######\nRun ' + str(datetime.datetime.now()) + '\n'
 
         # Change to the large storage directory
         os.chdir('/storage/')
@@ -131,7 +131,7 @@ class IndexCrawler(object):
                             else:
                                 try:
                                     # Download file
-                                    print('\rDownloading ' + directory + file, end='')
+                                    # print('\rDownloading ' + directory + file, end='')
                                     ftp.download(directory + file)
 
                                     # Unzip file
@@ -157,11 +157,11 @@ class IndexCrawler(object):
             exit_code = 'Loop complete'
             sys.exit()
         except (KeyboardInterrupt, SystemExit) as e:
-            print('\n')
             if isinstance(e, KeyboardInterrupt):
                 exit_code = 'Keyboard interrupt'
             if exit_code is None:
                 exit_code = 'Unknown'
+            print(exit_code)
             this_log += 'Exit: %s\nPreviously Complete: %d\nSuccessful: %d\nFailed: %d\nUnattempted: %d\n' \
                         % (exit_code, previously_complete, success, fail, total-(previously_complete+success+fail))
             log_file.write(this_log + '\n#####################\n#####################\n')

@@ -93,14 +93,15 @@ elif fn == '-a' or fn == 'auto':
     else:
         timeout = arg1
 
-    print('Automated Run beginning %s\n\nIndex Crawler: ' % datetime.datetime.now())
+    print('Automated Run beginning %s\nIndex Crawler: ' % datetime.datetime.now(), end='')
     ic = IndexCrawler()
     ic.crawl(settings['start_year'], settings['end_year'], None, settings['index_timeout'])
 
     os.chdir(pkg_path)
-    print('Document Crawler: ')
+    print('Document Crawler: ', end='')
     dc = DocumentCrawler()
     dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], timeout)
+    print('\n')
 
 elif fn == '-idx' or fn == 'index_crawler':
     # Validate input
