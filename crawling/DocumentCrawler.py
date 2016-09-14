@@ -86,6 +86,8 @@ class DocumentCrawler(object):
                     # Ignore quarters that haven't finished yet
                     if year >= current_year and qtr > current_qtr:
                         continue
+                    y = year
+                    q = qtr
                     # Init counters
                     q_total = 0
                     q_success = 0
@@ -151,17 +153,22 @@ class DocumentCrawler(object):
             sys.exit()
 
         except (KeyboardInterrupt, SystemExit) as e:
+
             if isinstance(e, KeyboardInterrupt):
                 t_exit_code = 'Keyboard interrupt'
             if t_exit_code is None:
                 t_exit_code = 'Unknown'
+            if t_exit_code != 'Loop complete':
+                qtr_log = '\n%sQTR%s, %d, %d, %d, %d' % \
+                              (str(y), str(q), q_previously_complete, q_success,
+                               q_fail, q_total - (q_previously_complete + q_success + q_fail)) + qtr_log
             print(t_exit_code)
             qtr_log = '####### By Quarter Summary #######\nQTR, Previous, Success, Fail, Unattempted' + qtr_log
             this_log += 'Exit: %s at %s\nPreviously Complete: %d\nSuccessful: %d\nFailed: %d\n' \
                         'Unattempted: %d\n' % \
                         (t_exit_code, str(datetime.datetime.now()), t_previously_complete, t_success,
                          t_fail, t_total - (t_previously_complete + t_success + t_fail))
-            log_file.write(this_log + '\n' + qtr_log + '\n#####################\n#####################\n')
+            log_file.write(this_log + '\n' + qtr_log + '\n\n#####################\n#####################\n')
             log_file.write('\n' + error_log + '\n\n' + past_log)
             log_file.close()
 

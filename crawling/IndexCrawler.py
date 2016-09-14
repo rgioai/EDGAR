@@ -96,7 +96,7 @@ class IndexCrawler(object):
                                 os.remove(file_to_check)
                             try:
                                 # Download file
-                                print('\rDownloading ' + directory + file, end='')
+                                # print('\rDownloading ' + directory + file, end='')
                                 ftp.download('full-index/' + file, directory + file)
 
                                 # Unzip file
