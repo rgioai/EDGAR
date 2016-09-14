@@ -165,5 +165,5 @@ class IndexCrawler(object):
             this_log += 'Exit: %s\nPreviously Complete: %d\nSuccessful: %d\nFailed: %d\nUnattempted: %d\n' \
                         % (exit_code, previously_complete, success, fail, total-(previously_complete+success+fail))
             log_file.write(this_log + '\n#####################\n#####################\n')
-            log_file.write('\n' + error_log + '\n\n' + past_log)
+            log_file.write('\n' + error_log + '\n' + past_log)
             log_file.close()

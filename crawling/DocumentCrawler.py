@@ -169,7 +169,7 @@ class DocumentCrawler(object):
                         (t_exit_code, str(datetime.datetime.now()), t_previously_complete, t_success,
                          t_fail, t_total - (t_previously_complete + t_success + t_fail))
             log_file.write(this_log + '\n' + qtr_log + '\n\n#####################\n#####################\n')
-            log_file.write('\n' + error_log + '\n\n' + past_log)
+            log_file.write('\n' + error_log + '\n' + past_log)
             log_file.close()
 
     def local_form_address(self, cik, form, year, qtr, edgar_addr, xbrl=False):
