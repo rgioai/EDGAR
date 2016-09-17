@@ -49,10 +49,13 @@ class DocumentCrawler(object):
         # Read past log file
         if os.path.exists('crawling/logs/log_DocCrawler.txt'):
             log_file = open('crawling/logs/log_DocCrawler.txt', 'r')
+            old_file = open('crawling/logs/log_temp_DocCrawler.txt', 'w')
             try:
                 past_log = log_file.read().split('#####################\n#####################')[1]
             except IndexError:
                 past_log = ''
+            old_file.write(log_file.read())
+            old_file.close()
             log_file.close()
         else:
             past_log = ''
