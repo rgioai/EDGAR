@@ -1,0 +1,36 @@
+from robobrowser import RoboBrowser
+from zipfile import ZipFile
+import os
+
+
+def download_and_unzip(url):
+    l = url.split('/')
+    zip_name = l[len(l)-l]
+
+    browser = RoboBrowser(history=False, allow_redirects=True)
+    request = browser.session.get(url, stream=True)
+
+    with open(zip_name, "wb") as f:
+        f.write(request.content)
+        f.close()
+
+    zipped = ZipFile(zip_name)
+    zipped.extractall()
+    zipped.close()
+
+    os.remove(zip_name)
+
+
+if __name__ == '__main__':
+    with open('logfiles', 'r') as f:
+        logs = f.read()
+        f.close()
+    logs = logs.split(' ')
+
+    os.chdir('/storage/sec_logs')
+
+    for l in logs:
+        download_and_unzip(l)
+
+
+
