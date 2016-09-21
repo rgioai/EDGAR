@@ -4,8 +4,9 @@ import os
 
 
 def download_and_unzip(url):
+    url = 'https://' + url
     l = url.split('/')
-    zip_name = l[len(l)-l]
+    zip_name = l[len(l)-1]
     csv_name = zip_name.replace('.zip', '.csv')
 
     if not os.path.exists(csv_name):
@@ -21,9 +22,9 @@ def download_and_unzip(url):
         zipped.close()
 
         os.remove(zip_name)
-        print("Collecting: %s" %s csv_name)
+        print("Collecting: %s" % csv_name)
     else:
-        print("Collected: %s" %s csv_name)
+        print("Collected: %s" % csv_name)
 
 
 if __name__ == '__main__':
