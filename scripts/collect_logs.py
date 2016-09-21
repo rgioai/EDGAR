@@ -6,19 +6,24 @@ import os
 def download_and_unzip(url):
     l = url.split('/')
     zip_name = l[len(l)-l]
+    csv_name = zip_name.replace('.zip', '.csv')
 
-    browser = RoboBrowser(history=False, allow_redirects=True)
-    request = browser.session.get(url, stream=True)
+    if not os.path.exists(csv_name):
+        browser = RoboBrowser(history=False, allow_redirects=True)
+        request = browser.session.get(url, stream=True)
 
-    with open(zip_name, "wb") as f:
-        f.write(request.content)
-        f.close()
+        with open(zip_name, "wb") as f:
+            f.write(request.content)
+            f.close()
 
-    zipped = ZipFile(zip_name)
-    zipped.extractall()
-    zipped.close()
+        zipped = ZipFile(zip_name)
+        zipped.extractall()
+        zipped.close()
 
-    os.remove(zip_name)
+        os.remove(zip_name)
+        print("Collecting: %s" %s csv_name)
+    else:
+        print("Collected: %s" %s csv_name)
 
 
 if __name__ == '__main__':
@@ -29,6 +34,7 @@ if __name__ == '__main__':
 
     os.chdir('/storage/sec_logs')
 
+    total = len(logs)
     for l in logs:
         download_and_unzip(l)
 
