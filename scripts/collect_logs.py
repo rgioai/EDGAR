@@ -29,6 +29,12 @@ def download_and_unzip(url):
         print("Collected: %s" % csv_name)
 
 
+def collect_bad_zips():
+    for f in os.listdir('/storage/sec_logs'):
+        if '.zip' in f:
+            os.rename('/storage/sec_logs/' + f, '/storage/sec_logs/bad_zips/' + f)
+
+
 if __name__ == '__main__':
     with open('logfiles', 'r') as f:
         logs = f.read()
@@ -38,8 +44,9 @@ if __name__ == '__main__':
     os.chdir('/storage/sec_logs')
 
     total = len(logs)
-    for l in logs:
-        download_and_unzip(l)
-
-
-
+    try:
+        for l in logs:
+            download_and_unzip(l)
+    except Exception:
+        pass
+    collect_bad_zips()
