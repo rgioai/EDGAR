@@ -17,7 +17,10 @@ def add_to_table(doc, path, table):
 
 def add_data(doc, path):
     return_string = ''
-    return_string += ',' + add_acceptance_dtg(doc, path)
+    try:
+        return_string += ',' + add_acceptance_dtg(doc, path)
+    except IndexError:
+        pass
     return return_string
 
 
