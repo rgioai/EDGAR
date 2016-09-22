@@ -8,7 +8,7 @@ def add_to_table(doc, table):
     l2 = l[2].split('(')
     form = l2[0]
     accession = l2[1].replace(').txt', '')
-    row = '%s,%s,%s,%s' % cik, qtr, form, accession
+    row = '%s,%s,%s,%s' % (cik, qtr, form, accession)
     return row
 
 
