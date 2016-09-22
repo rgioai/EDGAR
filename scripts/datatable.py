@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     for t in os.listdir('/storage/cik'):
         for m in os.listdir('/storage/cik/%s' % t):
-            for l in os.listdir('/storage/cik/%s/%s' % t, m):
+            for l in os.listdir('/storage/cik/%s/%s' % (t, m)):
                 for d in os.listdir('/storage/cik/%s/%s/%s' % (t, m, l)):
                     print(add_to_table(d, datatable))
 
