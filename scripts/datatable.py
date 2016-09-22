@@ -2,7 +2,8 @@ import pytz
 import os
 from datetime import datetime
 
-def add_to_table(doc, table):
+
+def add_to_table(doc, path, table):
     l = doc.split('_')
     cik = l[0]
     qtr = l[1]
@@ -10,19 +11,19 @@ def add_to_table(doc, table):
     form = l2[0]
     accession = l2[1].replace(').txt', '')
     row = '%s,%s,%s,%s' % (cik, qtr, form, accession)
-    row += add_data(doc)
+    row += add_data(doc, path)
     return row
     #table.write(row)
 
 
-def add_data(doc):
+def add_data(doc, path):
     return_string = ''
-    return_string += ',' + add_acceptance_dtg(doc)
+    return_string += ',' + add_acceptance_dtg(doc, path)
     return return_string
 
 
-def add_acceptance_dtg(doc):
-    d = open(doc, 'r')
+def add_acceptance_dtg(doc, path):
+    d = open(path + '/' + doc, 'r')
     line = d.read().splitlines()[3]
     d.close()
     acceptance_datetime = line.split('>')[1]
@@ -48,7 +49,8 @@ if __name__ == '__main__':
         for m in os.listdir('/storage/cik/%s' % t):
             for l in os.listdir('/storage/cik/%s/%s' % (t, m)):
                 for d in os.listdir('/storage/cik/%s/%s/%s' % (t, m, l)):
-                    print(add_to_table(d, datatable))
+                    path = '/storage/cik/%s/%s/%s' % (t, m, l)
+                    print(add_to_table(d, path, datatable))
                     break
 
 
