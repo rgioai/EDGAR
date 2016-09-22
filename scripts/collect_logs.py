@@ -16,13 +16,15 @@ def download_and_unzip(url):
         with open(zip_name, "wb") as f:
             f.write(request.content)
             f.close()
+        try:
+            zipped = ZipFile(zip_name)
+            zipped.extractall()
+            zipped.close()
 
-        zipped = ZipFile(zip_name)
-        zipped.extractall()
-        zipped.close()
-
-        os.remove(zip_name)
-        print("Collecting: %s" % csv_name)
+            os.remove(zip_name)
+            print("Collecting: %s" % csv_name)
+        except zipfile.BadZipFile:
+            pass
     else:
         print("Collected: %s" % csv_name)
 
