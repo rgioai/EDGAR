@@ -12,8 +12,7 @@ def add_to_table(doc, path, table):
     accession = l2[1].replace(').txt', '')
     row = '%s,%s,%s,%s' % (cik, qtr, form, accession)
     row += add_data(doc, path)
-    return row
-    #table.write(row)
+    table.write(row)
 
 
 def add_data(doc, path):
@@ -50,7 +49,7 @@ if __name__ == '__main__':
             for l in os.listdir('/storage/cik/%s/%s' % (t, m)):
                 for d in os.listdir('/storage/cik/%s/%s/%s' % (t, m, l)):
                     path = '/storage/cik/%s/%s/%s' % (t, m, l)
-                    print(add_to_table(d, path, datatable))
-                    break
+                    add_to_table(d, path, datatable)
+    datatable.close()
 
 
