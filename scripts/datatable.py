@@ -12,7 +12,7 @@ def add_to_table(doc, path, table):
     accession = l2[1].replace(').txt', '')
     row = '%s,%s,%s,%s' % (cik, qtr, form, accession)
     row += add_data(doc, path)
-    table.write(row)
+    table.write(row + '\n')
 
 
 def add_data(doc, path):
