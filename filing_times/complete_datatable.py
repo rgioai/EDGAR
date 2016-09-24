@@ -48,6 +48,8 @@ if __name__ == '__main__':
     os.chdir('/storage/cik')
 
     for t in os.listdir('/storage/cik'):
+        if t == 'metadata':
+            continue
         for m in os.listdir('/storage/cik/%s' % t):
             for l in os.listdir('/storage/cik/%s/%s' % (t, m)):
                 for d in os.listdir('/storage/cik/%s/%s/%s' % (t, m, l)):
