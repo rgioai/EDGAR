@@ -42,8 +42,8 @@ def add_acceptance_dtg(doc, path):
 
 
 if __name__ == '__main__':
-    os.chdir('/storage')
-    datatable = open('dataTable.csv', 'w')
+
+    datatable = open('datatables/complete.csv', 'w')
 
     os.chdir('/storage/cik')
 
