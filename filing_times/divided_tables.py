@@ -31,22 +31,34 @@ if __name__ == '__main__':
         title = y
         arr = np.array(years[y])
         pp = PdfPages('datatables/by-year/%s.pdf' % title)
-        # TODO Make plt
+        n, b, p = plt.hist(arr, bins)
+        plt.xlabel('Hour')
+        plt.ylabel('Num_Filings')
+        plt.title(title)
         plt.savefig(pp, format='pdf')
         pp.close()
+        plt.close()
 
     for f in forms.keys():
         title = f
         arr = np.array(forms[f])
         pp = PdfPages('datatables/by-form/%s.pdf' % title)
-        # TODO Make plt
+        n, b, p = plt.hist(arr, bins)
+        plt.xlabel('Hour')
+        plt.ylabel('Num_Filings')
+        plt.title(title)
         plt.savefig(pp, format='pdf')
         pp.close()
+        plt.close()
 
     title = 'All'
     arr = np.array(all)
     pp = PdfPages('datatables/%s.pdf' % title)
-    # TODO Make plt
+    n, b, p = plt.hist(arr, bins)
+    plt.xlabel('Hour')
+    plt.ylabel('Num_Filings')
+    plt.title(title)
     plt.savefig(pp, format='pdf')
     pp.close()
+    plt.close()
 
