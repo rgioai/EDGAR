@@ -4,13 +4,17 @@ import numpy as np
 
 
 if __name__ == '__main__':
-    complete_datatable = open('datatables/complete.csv', 'w')
+    complete_datatable = open('datatables/complete.csv', 'r')
     years = {}
     forms = {}
     all = []
     for line in complete_datatable:
-        cik, qtr, form, accession, dtg = line.split(',')
-        year = qtr.split('Q')
+        try:
+            cik, qtr, form, accession, dtg = line.split(',')
+        except ValueError:
+            print(line)
+            continue
+        year = qtr.split('Q')[0]
         # 2016-08-03 16:32:32-04:56
         time_string = dtg.split(' ')[1]
         hour = int(time_string.split(':')[0])
