@@ -129,6 +129,8 @@ class DocumentCrawler(object):
                                             t_success += 1
                                             q_success += 1
                                             status = 'success'
+                                        except BrokenPipeError:
+                                            raise BrokenPipeError
                                         except Exception as e:
                                             # Log errors
                                             error_log += str(datetime.datetime.now()) + ': Failed to download ' \

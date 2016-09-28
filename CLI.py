@@ -7,6 +7,7 @@ edgar fn arg1 arg2 arg3 arg4"""
 import sys
 import os
 import subprocess
+import time
 import datetime
 from crawling.IndexCrawler import IndexCrawler
 from crawling.DocumentCrawler import DocumentCrawler
@@ -99,10 +100,17 @@ elif fn == '-a' or fn == 'auto':
     # ic.crawl(settings['start_year'], settings['end_year'], None, settings['index_timeout'])
 
     os.chdir(pkg_path)
-    print('Document Crawler: ', end='')
-    dc = DocumentCrawler()
-    dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], timeout)
-    print('\n')
+    try:
+        print('Document Crawler: ', end='')
+        dc = DocumentCrawler()
+        dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], timeout)
+        print('\n')
+    except BrokenPipeError:
+        time.sleep(60*30)
+        print('Document Crawler: ', end='')
+        dc = DocumentCrawler()
+        dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], timeout)
+        print('\n')
 
 elif fn == '-idx' or fn == 'index_crawler':
     # Validate input
