@@ -3,6 +3,8 @@
 from objects.FTP import EdgarFtp
 from objects.AVLTree import AVLTree
 import os
+from random import randint
+from time import sleep
 from math import ceil
 import datetime
 import pickle
@@ -17,7 +19,7 @@ class DocumentCrawler(object):
     def __init__(self):
         pass
 
-    def crawl(self, start_year=2000, end_year=2016, forms_to_download=None, timeout=None):
+    def crawl(self, start_year=2000, end_year=2016, forms_to_download=None, timeout=None, delay=None):
         """
         :param start_year: The earliest year for which to collect data; default 2000
         :param end_year: The latest year for which to collect data; default 2016
@@ -38,6 +40,16 @@ class DocumentCrawler(object):
         if timeout is not None:
             timeout = datetime.timedelta(hours=timeout)
         start = datetime.datetime.now()
+
+        # Handle delay
+        if delay is not None:
+            fast = randint(0, 2)
+            if fast <= 1:
+                wait = randint(5, 30)
+            elif fast == 2:
+                wait = randint(31, 60)
+        else:
+            wait = 0
 
         # Init ftp object
         ftp = EdgarFtp()
@@ -130,6 +142,7 @@ class DocumentCrawler(object):
                                             q_success += 1
                                             status = 'success'
                                         except BrokenPipeError:
+                                            t_exit_code = 'Broken Pipe Error'
                                             raise BrokenPipeError
                                         except Exception as e:
                                             # Log errors
@@ -138,6 +151,7 @@ class DocumentCrawler(object):
                                             t_fail += 1
                                             q_fail += 1
                                             status = 'fail'
+                                        sleep(wait)
                                     else:
                                         t_previously_complete += 1
                                         q_previously_complete += 1
@@ -157,7 +171,7 @@ class DocumentCrawler(object):
             t_exit_code = 'Loop complete'
             sys.exit()
 
-        except (KeyboardInterrupt, SystemExit) as e:
+        except (KeyboardInterrupt, SystemExit, BrokenPipeError) as e:
 
             if isinstance(e, KeyboardInterrupt):
                 t_exit_code = 'Keyboard interrupt'
@@ -176,6 +190,8 @@ class DocumentCrawler(object):
             log_file.write(this_log + '\n' + qtr_log + '\n\n#####################\n#####################\n')
             log_file.write('\n' + error_log + '\n' + past_log)
             log_file.close()
+            if isinstance(e, BrokenPipeError):
+                raise BrokenPipeError
 
     def local_form_address(self, cik, form, year, qtr, edgar_addr, xbrl=False):
         """

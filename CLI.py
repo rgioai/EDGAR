@@ -74,6 +74,44 @@ if fn == '-t' or fn == 'test':
     os.chdir('/storage/')
     print("storage dir: %s" % os.getcwd())
 
+elif fn == '-d' or fn == 'daytime':
+    settings = {}
+    with open('crawling/crawling_settings.txt', 'r') as f:
+        for line in f:
+            if "EDGAR" in line:
+                continue
+            elif "####" in line:
+                break
+            else:
+                line = line.replace(' ', '')
+                line = line.replace('\n', '')
+                line = line.split(':')
+                settings[line[0]] = line[1]
+    settings['forms'] = settings['forms'].split(',')
+
+    if arg1 == 0:
+        timeout = settings['doc_timeout']
+    else:
+        timeout = arg1
+
+    print('Automated Run beginning %s\nIndex Crawler: ' % datetime.datetime.now(), end='')
+    # Not running during initial data collection to save time/resources
+    # ic = IndexCrawler()
+    # ic.crawl(settings['start_year'], settings['end_year'], None, settings['index_timeout'])
+
+    os.chdir(pkg_path)
+    try:
+        print('Document Crawler: ', end='')
+        dc = DocumentCrawler()
+        dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], timeout)
+        print('\n')
+    except BrokenPipeError:
+        time.sleep(60*30)
+        print('Document Crawler: ', end='')
+        dc = DocumentCrawler()
+        dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], timeout)
+        print('\n')
+
 elif fn == '-a' or fn == 'auto':
     settings = {}
     with open('crawling/crawling_settings.txt', 'r') as f:
@@ -98,6 +136,7 @@ elif fn == '-a' or fn == 'auto':
     # Not running during initial data collection to save time/resources
     # ic = IndexCrawler()
     # ic.crawl(settings['start_year'], settings['end_year'], None, settings['index_timeout'])
+    print('Not run')
 
     os.chdir(pkg_path)
     try:
