@@ -98,18 +98,19 @@ elif fn == '-d' or fn == 'daytime':
     # Not running during initial data collection to save time/resources
     # ic = IndexCrawler()
     # ic.crawl(settings['start_year'], settings['end_year'], None, settings['index_timeout'])
+    print('Not run')
 
     os.chdir(pkg_path)
     try:
         print('Document Crawler: ', end='')
         dc = DocumentCrawler()
-        dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], timeout)
+        dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], timeout, delay='')
         print('\n')
     except BrokenPipeError:
         time.sleep(60*30)
         print('Document Crawler: ', end='')
         dc = DocumentCrawler()
-        dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], timeout)
+        dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], timeout, delay='')
         print('\n')
 
 elif fn == '-a' or fn == 'auto':
