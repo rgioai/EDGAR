@@ -148,7 +148,7 @@ elif fn == '-a' or fn == 'auto':
         time.sleep(60*30)
         print('Document Crawler: ', end='')
         dc = DocumentCrawler()
-        dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], timeout)
+        dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], timeout/2)
         print('\n')
 
 elif fn == '-idx' or fn == 'index_crawler':

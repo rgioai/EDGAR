@@ -25,6 +25,7 @@ class DocumentCrawler(object):
         :param end_year: The latest year for which to collect data; default 2016
         :param forms_to_download: Forms types to download; default ['10-K', '10-Q', '10-K/A', '10-Q/A']
         :param timeout: Decimal hours of how long to run before timeout; default None
+        :param delay: Int seconds to delay between requests or '' to randomize delay time
         :return: None
         """
         # Force parameter types
@@ -43,11 +44,14 @@ class DocumentCrawler(object):
 
         # Handle delay
         if delay is not None:
-            fast = randint(0, 2)
-            if fast <= 1:
-                wait = randint(5, 30)
-            elif fast == 2:
-                wait = randint(31, 60)
+            if isinstance(delay, int):
+                wait = delay
+            else:
+                fast = randint(0, 2)
+                if fast <= 1:
+                    wait = randint(5, 30)
+                elif fast == 2:
+                    wait = randint(31, 60)
         else:
             wait = 0
 
@@ -187,6 +191,7 @@ class DocumentCrawler(object):
                         'Unattempted: %d\n' % \
                         (t_exit_code, str(datetime.datetime.now()), t_previously_complete, t_success,
                          t_fail, t_total - (t_previously_complete + t_success + t_fail))
+            error_log += 'Exit: %s at %s\n' % (t_exit_code, str(datetime.datetime.now()))
             log_file.write(this_log + '\n' + qtr_log + '\n\n#####################\n#####################\n')
             log_file.write('\n' + error_log + '\n' + past_log)
             log_file.close()
