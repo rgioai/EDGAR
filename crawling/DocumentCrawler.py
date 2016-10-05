@@ -19,7 +19,7 @@ class DocumentCrawler(object):
     def __init__(self):
         pass
 
-    def crawl(self, start_year=2000, end_year=2016, forms_to_download=None, timeout=None, delay=None):
+    def crawl(self, start_year=2000, end_year=2016, forms_to_download=None, kill_time=None, delay=None):
         """
         :param start_year: The earliest year for which to collect data; default 2000
         :param end_year: The latest year for which to collect data; default 2016
@@ -31,16 +31,13 @@ class DocumentCrawler(object):
         # Force parameter types
         start_year = int(start_year)
         end_year = int(end_year)
-        timeout = float(timeout)
+        assert(isinstance(kill_time, datetime.datetime) or kill_time is None)
 
         # Handle mutable defaults
         if forms_to_download is None:
             forms_to_download = ['10-K', '10-Q', '10-K/A', '10-Q/A']
         assert(isinstance(forms_to_download, list))
         assert(isinstance(forms_to_download[0], str))
-        if timeout is not None:
-            timeout = datetime.timedelta(hours=timeout)
-        start = datetime.datetime.now()
 
         # Handle delay
         if delay is not None:
@@ -118,9 +115,6 @@ class DocumentCrawler(object):
                     index_file = open(directory + 'master.idx', 'r')
 
                     header = True
-                    # TODO Figure out what's wrong
-                    """UnicodeDecodeError:
-                    ‘utf-8’ codec can’t decode byte 0xc3 in position 2313: invalid continuation byte"""
                     try:
                         for line in index_file:
                             line = line.replace('\n', '')
@@ -161,8 +155,8 @@ class DocumentCrawler(object):
                                         q_previously_complete += 1
                                         status = 'previously complete'
                                     # print('%s for %s: %s' % (form, cik, status))
-                            if timeout is not None:
-                                if datetime.datetime.now() - start > timeout:
+                            if kill_time is not None:
+                                if datetime.datetime.now() > kill_time:
                                     t_exit_code = 'Timeout'
                                     sys.exit()
                     except UnicodeDecodeError as e:

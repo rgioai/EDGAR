@@ -99,16 +99,17 @@ elif fn == '-d' or fn == 'daytime':
     ic.crawl(settings['start_year'], settings['end_year'], None, settings['index_timeout'])
 
     os.chdir(pkg_path)
+    kill_time = datetime.datetime.now() + datetime.timedelta(hours=timeout)
     try:
         print('Document Crawler: ', end='')
         dc = DocumentCrawler()
-        dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], timeout, delay='')
+        dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], kill_time, delay='')
         print('\n')
     except BrokenPipeError:
         time.sleep(60*30)
         print('Document Crawler: ', end='')
         dc = DocumentCrawler()
-        dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], timeout, delay='')
+        dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], kill_time, delay='')
         print('\n')
 
 elif fn == '-a' or fn == 'auto':
@@ -138,16 +139,17 @@ elif fn == '-a' or fn == 'auto':
     print('Not run')
 
     os.chdir(pkg_path)
+    kill_time = datetime.datetime.now() + datetime.timedelta(hours=timeout)
     try:
         print('Document Crawler: ', end='')
         dc = DocumentCrawler()
-        dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], timeout)
+        dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], kill_time)
         print('\n')
     except BrokenPipeError:
         time.sleep(60*30)
         print('Document Crawler: ', end='')
         dc = DocumentCrawler()
-        dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], timeout/2)
+        dc.crawl(settings['start_year'], settings['end_year'], settings['forms'], kill_time)
         print('\n')
 
 elif fn == '-idx' or fn == 'index_crawler':
