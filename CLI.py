@@ -99,7 +99,7 @@ elif fn == '-d' or fn == 'daytime':
     ic.crawl(settings['start_year'], settings['end_year'], None, settings['index_timeout'])
 
     os.chdir(pkg_path)
-    kill_time = datetime.datetime.now() + datetime.timedelta(hours=timeout)
+    kill_time = datetime.datetime.now() + datetime.timedelta(hours=float(timeout))
     try:
         print('Document Crawler: ', end='')
         dc = DocumentCrawler()
