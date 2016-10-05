@@ -139,7 +139,7 @@ elif fn == '-a' or fn == 'auto':
     print('Not run')
 
     os.chdir(pkg_path)
-    kill_time = datetime.datetime.now() + datetime.timedelta(hours=timeout)
+    kill_time = datetime.datetime.now() + datetime.timedelta(hours=float(timeout))
     try:
         print('Document Crawler: ', end='')
         dc = DocumentCrawler()
