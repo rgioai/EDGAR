@@ -157,6 +157,8 @@ class DocumentCrawler(object):
                                     # print('%s for %s: %s' % (form, cik, status))
                             if kill_time is not None:
                                 if datetime.datetime.now() > kill_time:
+                                    print(datetime.datetime.now())
+                                    print(kill_time)
                                     t_exit_code = 'Timeout'
                                     sys.exit()
                     except UnicodeDecodeError as e:
