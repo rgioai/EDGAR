@@ -89,7 +89,7 @@ elif fn == '-d' or fn == 'daytime':
                 settings[line[0]] = line[1]
     settings['forms'] = settings['forms'].split(',')
 
-    if arg1 == 0:
+    if int(arg1) == 0:
         timeout = settings['doc_timeout']
     else:
         timeout = arg1
