@@ -24,7 +24,7 @@ class DocumentCrawler(object):
         :param start_year: The earliest year for which to collect data; default 2000
         :param end_year: The latest year for which to collect data; default 2016
         :param forms_to_download: Forms types to download; default ['10-K', '10-Q', '10-K/A', '10-Q/A']
-        :param timeout: Decimal hours of how long to run before timeout; default None
+        :param kill_time: Datetime object of time to quit; default None
         :param delay: Int seconds to delay between requests or '' to randomize delay time
         :return: None
         """
