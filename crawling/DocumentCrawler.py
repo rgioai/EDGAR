@@ -39,19 +39,6 @@ class DocumentCrawler(object):
         assert(isinstance(forms_to_download, list))
         assert(isinstance(forms_to_download[0], str))
 
-        # Handle delay
-        if delay is not None:
-            if isinstance(delay, int):
-                wait = delay
-            else:
-                fast = randint(0, 2)
-                if fast <= 1:
-                    wait = randint(5, 30)
-                elif fast == 2:
-                    wait = randint(31, 60)
-        else:
-            wait = 0
-
         # Init ftp object
         ftp = EdgarFtp()
 
@@ -149,7 +136,7 @@ class DocumentCrawler(object):
                                             t_fail += 1
                                             q_fail += 1
                                             status = 'fail'
-                                        sleep(wait)
+                                        sleep(self.random_wait(delay))
                                     else:
                                         t_previously_complete += 1
                                         q_previously_complete += 1
@@ -233,3 +220,17 @@ class DocumentCrawler(object):
                    % (top_dir, mid_dir, low_dir, str(cik), str(year),
                       str(qtr), str(form).replace('/', '-'), str(edgar_addr))
         return path
+
+    def random_wait(self, delay):
+        if delay is None:
+            wait = 0
+        # Handle delay
+        elif isinstance(delay, int):
+            wait = delay
+        else:
+            fast = randint(0, 2)
+            if fast <= 1:
+                wait = randint(5, 30)
+            elif fast == 2:
+                wait = randint(31, 60)
+        return wait
