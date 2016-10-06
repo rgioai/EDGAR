@@ -179,7 +179,7 @@ class DocumentCrawler(object):
                 qtr_log = '\n%sQTR%s, %d, %d, %d, %d' % \
                               (str(y), str(q), q_previously_complete, q_success,
                                q_fail, q_total - (q_previously_complete + q_success + q_fail)) + qtr_log
-            print(t_exit_code)
+            print('%s at %s' % (t_exit_code, str(datetime.datetime.now())))
             qtr_log = '####### By Quarter Summary #######\nQTR, Previous, Success, Fail, Unattempted' + qtr_log
             this_log += 'Exit: %s at %s\nPreviously Complete: %d\nSuccessful: %d\nFailed: %d\n' \
                         'Unattempted: %d\n' % \

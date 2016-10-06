@@ -97,6 +97,7 @@ elif fn == '-d' or fn == 'daytime':
     print('Automated Run beginning %s\nIndex Crawler: ' % datetime.datetime.now(), end='')
     ic = IndexCrawler()
     ic.crawl(settings['start_year'], settings['end_year'], None, settings['index_timeout'])
+    print('\n')
 
     os.chdir(pkg_path)
     kill_time = datetime.datetime.now() + datetime.timedelta(hours=float(timeout))
