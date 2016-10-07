@@ -230,7 +230,7 @@ class DocumentCrawler(object):
         else:
             fast = randint(0, 2)
             if fast <= 1:
-                wait = randint(5, 30)
+                wait = randint(5, 15)
             elif fast == 2:
-                wait = randint(31, 60)
+                wait = randint(15, 60)
         return wait
