@@ -59,9 +59,6 @@ class DocumentCrawler(object):
             log_file.close()
         else:
             past_log = ''
-
-        # Open new log file
-        log_file = open('crawling/logs/log_DocCrawler.txt', 'w')
         this_log = '####### Doc Crawler Summary #######\nRun ' + str(datetime.datetime.now()) + '\n'
         qtr_log = ''
         error_log = '####### Doc Crawler Errors #######\nRun ' + str(datetime.datetime.now()) + '\n'
@@ -157,6 +154,8 @@ class DocumentCrawler(object):
             sys.exit()
 
         except (KeyboardInterrupt, SystemExit, BrokenPipeError) as e:
+            # Open new log file
+            log_file = open('crawling/logs/log_DocCrawler.txt', 'w')
 
             if isinstance(e, KeyboardInterrupt):
                 t_exit_code = 'Keyboard interrupt'
