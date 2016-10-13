@@ -155,6 +155,8 @@ class DocumentCrawler(object):
 
         except (KeyboardInterrupt, SystemExit, BrokenPipeError) as e:
             # Open new log file
+            pkg_path = os.path.expanduser('~') + '/EDGAR'
+            os.chdir(pkg_path)
             log_file = open('crawling/logs/log_DocCrawler.txt', 'w')
 
             if isinstance(e, KeyboardInterrupt):
