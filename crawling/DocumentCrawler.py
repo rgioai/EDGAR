@@ -145,6 +145,7 @@ class DocumentCrawler(object):
                                     sys.exit()
                     except UnicodeDecodeError as e:
                         error_log += str(datetime.datetime.now()) + ': Failed to decode ' + str(e) + '\n'
+                        print('Unicode error, previous line: %s' % line)
                         continue
                     qtr_log = '\n%sQTR%s, %d, %d, %d, %d' % \
                               (str(year), str(qtr), q_previously_complete, q_success,
