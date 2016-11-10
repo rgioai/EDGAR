@@ -131,9 +131,8 @@ elif fn == '-a' or fn == 'auto':
         timeout = arg1
 
     print('Automated Run beginning %s\nIndex Crawler: ' % datetime.datetime.now(), end='')
-    # Not running during initial data collection to save time/resources
-    # ic = IndexCrawler()
-    # ic.crawl(settings['start_year'], settings['end_year'], None, settings['index_timeout'])
+    ic = IndexCrawler()
+    ic.crawl(settings['start_year'], settings['end_year'], None, settings['index_timeout'])
     print('Not run')
 
     os.chdir(pkg_path)
