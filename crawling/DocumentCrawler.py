@@ -103,6 +103,7 @@ class DocumentCrawler(object):
                     try:
                         for line in index_file:
                             line = line.replace('\n', '')
+                            old_line = line
                             if header:
                                 # Filter out the header
                                 if '------------' in line:
@@ -147,6 +148,7 @@ class DocumentCrawler(object):
                     except UnicodeDecodeError as e:
                         error_log += str(datetime.datetime.now()) + ': Failed to decode ' + str(e) + '\n'
                         error_log += str(traceback.print_tb(sys.exc_info()[2])) + '\n'
+                        error_log += str(old_line)
                         continue
                     qtr_log = '\n%sQTR%s, %d, %d, %d, %d' % \
                               (str(year), str(qtr), q_previously_complete, q_success,
