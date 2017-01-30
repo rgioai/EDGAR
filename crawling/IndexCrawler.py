@@ -15,7 +15,7 @@ class IndexCrawler(object):
     def __init__(self):
         pass
 
-    def crawl(self, start_year=1993, end_year=2016, files_to_download=None, timeout=None):
+    def crawl(self, start_year=1993, end_year=2017, files_to_download=None, timeout=None):
         """
         :param start_year: The earliest year for which to collect data; default 2000
         :param end_year: The latest year for which to collect data; default 2016

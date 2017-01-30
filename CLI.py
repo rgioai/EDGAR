@@ -133,7 +133,6 @@ elif fn == '-a' or fn == 'auto':
     print('Automated Run beginning %s\nIndex Crawler: ' % datetime.datetime.now(), end='')
     ic = IndexCrawler()
     ic.crawl(settings['start_year'], settings['end_year'], None, settings['index_timeout'])
-    print('Not run')
 
     os.chdir(pkg_path)
     kill_time = datetime.datetime.now() + datetime.timedelta(hours=float(timeout))

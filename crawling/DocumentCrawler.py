@@ -20,7 +20,7 @@ class DocumentCrawler(object):
     def __init__(self):
         pass
 
-    def crawl(self, start_year=2000, end_year=2016, forms_to_download=None, kill_time=None, delay=None):
+    def crawl(self, start_year=2000, end_year=2017, forms_to_download=None, kill_time=None, delay=None):
         """
         :param start_year: The earliest year for which to collect data; default 2000
         :param end_year: The latest year for which to collect data; default 2016

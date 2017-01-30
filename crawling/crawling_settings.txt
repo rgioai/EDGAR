@@ -1,6 +1,6 @@
 EDGAR Automated Crawling Settings:
 start_year: 1993
-end_year: 2016
+end_year: 2017
 index_timeout: 0.25
 doc_timeout: 9
 forms: 10-K, 10-Q, 10-K/A, 10-Q/A, 8-K, 4
