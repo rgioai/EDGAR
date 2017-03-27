@@ -6,4 +6,9 @@
 
 numpy
 pandas
-robobrowser
+tensorflow==1.0.0
+seq2vec
+h5py
+joblib
+scipy
+sklearn
