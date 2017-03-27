@@ -12,4 +12,6 @@ rsync -r ~/PycharmProjects/EDGAR/xbrl_mapping/ rgio@10.0.1.27:/storage/xbrl_mapp
 
 rsync -r ~/PycharmProjects/EDGAR/xbrl_mapping/ rgio@fireball.cs.uni.edu:/storage/xbrl_mapping/
 
+rsync -r ~/PycharmProjects/EDGAR/xbrl_mapping/ rgio@buff.centurion.ai:/storage/xbrl_mapping
+
 rsync -r ~/PycharmProjects/EDGAR/xbrl_mapping/ /storage/xbrl_mapping/

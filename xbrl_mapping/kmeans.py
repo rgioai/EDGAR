@@ -46,7 +46,8 @@ if __name__ == '__main__':
                 print('')
         hdf5.close()
     elif '-exp' in sys.argv:
-        test_sizes = [0.25, 0.20, 0.15, 0.10, 0.05, 0.04, 0.03, 0.02, 0.01, 0.05]
+        test_sizes = [0.50, 0.45, 0.35, 0.30, 0.25, 0.20, 0.15, 0.14, 0.13, 0.12, 0.11,
+                      0.10, 0.09, 0.08, 0.07, 0.06, 0.05, 0.04, 0.03, 0.02, 0.01, 0.005]
         hdf5 = h5py.File('/storage/XBRL_Update/sc_data.hdf5', 'r+')
         vec_grp = hdf5['vector']
         for len_grp in vec_grp:

@@ -19,5 +19,5 @@ cd /storage/xbrl_mapping
 ./parce_sec_data.py -aw
 ./kmeans.py -aw
 ./distance.py -acdist
-./distance.py -nbest 5
 ./distance.py -nbest 1
+./report_results.py -a

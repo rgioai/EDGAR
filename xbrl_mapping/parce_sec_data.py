@@ -230,7 +230,7 @@ def make_vlen_datasets(tld_path, hdf5, sc_split=False):
         with open('%s/%s' % (tld_path, file_name), 'r') as f:
             lines = np.array(f.readlines(), dtype=h5py.special_dtype(vlen=str))
             if len(lines) <= 0:
-                return
+                continue
         category_name = file_name.split('/')[-1].replace('.txt', '')
         if category_name[0] == 's':
             dset = standard_grp.create_dataset(category_name[2:], data=lines)

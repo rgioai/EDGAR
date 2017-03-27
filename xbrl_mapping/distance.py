@@ -17,10 +17,10 @@ def scipy_dist_matrix(vec_len, category):
     std_grp = hdf5['vector/%s/standard/%s' % (str(vec_len), category)]
     cus_grp = hdf5['vector/%s/custom/%s' % (str(vec_len), category)]
     xa_dset = cus_grp['all_entries']
-    if xa_dset.shape[0] > 20000:
-        xa = xa_dset[0:20000]
-    else:
-        xa = xa_dset[:]
+    #if xa_dset.shape[0] > 20000:
+    #    xa = xa_dset[0:20000]
+    #else:
+    xa = xa_dset[:]
     xb = std_grp['clusters'][:]
     for dist_fn in dist_fns_list():
         start = time.time()
@@ -36,10 +36,10 @@ def n_best(n, vec_len, category):
     for dist_fn in dist_fns_list():
         start = time.time()
         dist_matrix_dset = grp['cdist_%s' % dist_fn.__name__]
-        if dist_matrix_dset.shape[0] > 20000:
-            dist_matrix = dist_matrix_dset[0:20000]
-        else:
-            dist_matrix = dist_matrix_dset[:]
+        #if dist_matrix_dset.shape[0] > 20000:
+        #    dist_matrix = dist_matrix_dset[0:20000]
+        #else:
+        dist_matrix = dist_matrix_dset[:]
         print('%s | %s | %s | %d x %d' %
               (str(vec_len), category, dist_fn.__name__,
                len(dist_matrix), len(dist_matrix[0])), end='')
@@ -52,7 +52,7 @@ def n_best(n, vec_len, category):
             for column_index in range(len(dist_matrix[row_index])):
                 for i in range(len(best)):
                     if abs(dist_matrix[row_index][column_index]) < best[i][1]:
-                        best.insert(i, abs([column_index, dist_matrix_dset[row_index][column_index]]))
+                        best.insert(i, [column_index, abs(dist_matrix_dset[row_index][column_index])])
                         best.pop()
                         break
             best_dset[row_index] = np.array(best, dtype=np.float32)
